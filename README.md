@@ -77,3 +77,10 @@ cd Example
 yarn
 expo start
 ```
+
+## Todo
+It's not very finished and some work has to be done yet.
+1. Play with magic config values
+2. Horizontal mode
+3. Deal with GH in inner scrollView
+4. Cleanup code (e.g. measuring of components)
