@@ -3,10 +3,12 @@ Component imitating native bottom sheet behavior built from scratch with react-n
 
 Usable with Expo with no extra native dependencies!
 
-![](gifs/1.gif)  |  ![](gifs/2.gif) |  ![](gifs/3.gif3)
+![](gifs/1.gif)  |  ![](gifs/2.gif) |  ![](gifs/3.gif)  |
+:---------------:|:----------------:|:-----------------:|
+
 
 ## Installation
-Make sure that you have previously installed and linked react-native-gesture-handler and react-native-reanimated and then:
+Make sure that you have previously installed and linked [react-native-gesture-handler](https://kmagiera.github.io/react-native-gesture-handler/docs/getting-started.html) and [react-native-reanimated](https://github.com/kmagiera/react-native-reanimated) and then:
 
 ```j
 yarn add reanimated-bottom-sheet
@@ -49,7 +51,7 @@ class Example extends React.Component {
 
 | name                      | required | default | description | 
 | ------------------------- | -------- | ------- | ------------|
-| snapPoints                | yes      |         | E.g. `[300, 200, 0]`. Points for snapping of bottom sheet coomponent. They define distance from bottom of the screen. Might be number or percent (as spring) for points from bottoms or percents of screen height. |
+| snapPoints                | yes      |         | E.g. `[300, 200, 0]`. Points for snapping of bottom sheet coomponent. They define distance from bottom of the screen. Might be number or percent (as string e.g. `'20%'`) for points or percents of screen height from bottom. |
 | initialSnap               | no       |    0    | Determines initial snap point of bottom sheet. |
 | renderContent             | no       |         | Method for rendering scrollable content of bottom sheet. |
 | renderHeader              | no       |         | Method for rendering non-scrollable header of bottom sheet. |
