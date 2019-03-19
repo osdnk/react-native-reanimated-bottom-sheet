@@ -1,7 +1,9 @@
 ## Reanimated Bottom Sheet
 Component imitating native bottom sheet behavior built from scratch with react-native-gesture-handler and react-native-reanimated.
 
-Usable with Expo with no extra native dependencies. 
+Usable with Expo with no extra native dependencies!
+
+![](gifs/1.gif)  |  ![](gifs/2.gif) |  ![](gifs/3.gif3)
 
 ## Installation
 Make sure that you have previously installed and linked react-native-gesture-handler and react-native-reanimated and then:
