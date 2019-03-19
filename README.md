@@ -10,7 +10,7 @@ Usable with Expo with no extra native dependencies!
 ## Installation
 Make sure that you have previously installed and linked [react-native-gesture-handler](https://kmagiera.github.io/react-native-gesture-handler/docs/getting-started.html) and [react-native-reanimated](https://github.com/kmagiera/react-native-reanimated) and then:
 
-```j
+```
 yarn add reanimated-bottom-sheet
 ```
 
