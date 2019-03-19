@@ -67,7 +67,7 @@ class Example extends React.Component {
 Imperative command for snapping to snap point in given index. E.g.
 
 ```javascript
-this.bottomSheet.current.snaptTo(0)
+this.bottomSheet.current.snapTo(0)
 ```
 
 ## Example
