@@ -69,8 +69,8 @@ function runDecay(clock, value, velocity, wasStartedFromBegin) {
 }
 
 function withPreservingAdditiveOffset(drag, state) {
-  const prev = new Animated.Value(0)
-  const valWithPreservedOffset = new Animated.Value(0)
+  const prev = new Value(0)
+  const valWithPreservedOffset = new Value(0)
   return block([
     cond(eq(state, State.BEGAN), [
       set(prev, 0)
@@ -83,10 +83,10 @@ function withPreservingAdditiveOffset(drag, state) {
 }
 
 function withDecaying(drag, state, decayClock, velocity, prevent) {
-  const valDecayed = new Animated.Value(0)
-  const offset = new Animated.Value(0)
+  const valDecayed = new Value(0)
+  const offset = new Value(0)
   // since there might be moar than one clock
-  const wasStartedFromBegin = new Animated.Value(0)
+  const wasStartedFromBegin = new Value(0)
   return block([
     cond(eq(state, State.END),
       [
@@ -156,10 +156,10 @@ export default class BottomSheetBehavior extends Component {
   velocity = new Value(0);
   panMasterState = new Value(State.END);
   masterVelocity = new Value(0);
-  isManuallySetValue = new Animated.Value(0);
-  manuallySetValue = new Animated.Value(0);
+  isManuallySetValue = new Value(0);
+  manuallySetValue = new Value(0);
   masterClockForOverscroll = new Clock();
-  preventDecaying = new Animated.Value(0);
+  preventDecaying = new Value(0);
   dragMasterY = new Value(0);
   dragY = new Value(0);
 
@@ -187,8 +187,8 @@ export default class BottomSheetBehavior extends Component {
     this.snapPoint = currentSnapPoint()
 
     const masterClock = new Clock()
-    const prevMasterDrag = new Animated.Value(0)
-    const wasRun = new Animated.Value(0)
+    const prevMasterDrag = new Value(0)
+    const wasRun = new Value(0)
     this.translateMaster = block([
       cond(eq(this.panMasterState, State.END),
         [
@@ -250,18 +250,18 @@ export default class BottomSheetBehavior extends Component {
   handleTap = event([{ nativeEvent: { state: this.tapState } }]);
 
   withEnhancedLimits(val, masterOffseted) {
-    const wasRunMaster = new Animated.Value(0)
+    const wasRunMaster = new Value(0)
     const min = multiply(-1, add(this.state.heightOfContent, this.state.heightOfHeaderAnimated))
-    const prev = new Animated.Value(0)
-    const limitedVal = new Animated.Value(0)
-    const diffPres = new Animated.Value(0)
-    const flagWasRunSpring = new Animated.Value(0)
-    const justEndedIfEnded = new Animated.Value(1)
-    const wasEndedMasterAfterInner = new Animated.Value(1)
-    const prevMaster = new Animated.Value(1)
-    const prevState = new Animated.Value(0)
+    const prev = new Value(0)
+    const limitedVal = new Value(0)
+    const diffPres = new Value(0)
+    const flagWasRunSpring = new Value(0)
+    const justEndedIfEnded = new Value(1)
+    const wasEndedMasterAfterInner = new Value(1)
+    const prevMaster = new Value(1)
+    const prevState = new Value(0)
 
-    const rev = new Animated.Value(0)
+    const rev = new Value(0)
     return block([
       set(rev, limitedVal),
       cond(or(eq(this.panState, State.BEGAN), and(eq(this.panState, State.ACTIVE), eq(prevState, State.END))), [
@@ -316,7 +316,7 @@ export default class BottomSheetBehavior extends Component {
     this.isManuallySetValue.setValue(1)
   };
 
-  height = new Animated.Value(0)
+  height = new Value(0)
 
   handleLayoutHeader = ({
     nativeEvent: {
@@ -377,8 +377,8 @@ export default class BottomSheetBehavior extends Component {
     return {
       init: sortedPropsSnapPints[0].val - sortedPropsSnapPints[propsToNewIncides[initialSnap]].val,
       propsToNewIncides,
-      heightOfHeaderAnimated: (state && state.heightOfHeaderAnimated) || new Animated.Value(0),
-      heightOfContent: (state && state.heightOfContent) || new Animated.Value(0),
+      heightOfHeaderAnimated: (state && state.heightOfHeaderAnimated) || new Value(0),
+      heightOfContent: (state && state.heightOfContent) || new Value(0),
       initSnap: sortedPropsSnapPints[0].val,
       snapPoints
     }

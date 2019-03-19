@@ -1,11 +1,11 @@
-import React from 'react';
-import { Text, View, FlatList, StyleSheet, TouchableOpacity, YellowBox } from 'react-native';
-import { createStackNavigator, createAppContainer } from 'react-navigation';
+import React from 'react'
+import { Text, View, FlatList, StyleSheet, TouchableOpacity } from 'react-native'
+import { createStackNavigator, createAppContainer } from 'react-navigation'
 
-import Map from './Map';
-import BlurToolbar from './BlurToolbar';
-import Imperative from './Imperative';
-import Test from './Test';
+import Map from './Map'
+import BlurToolbar from './BlurToolbar'
+import Imperative from './Imperative'
+import Test from './Test'
 
 const SCREENS = {
   map: {
@@ -24,14 +24,14 @@ const SCREENS = {
     screen: Test,
     title: 'Test',
   },
-};
+}
 
 class MainScreen extends React.Component {
   static navigationOptions = {
     title: 'Bottom Sheet Examples',
   };
   render() {
-    const data = Object.keys(SCREENS).map(key => ({ key }));
+    const data = Object.keys(SCREENS).map(key => ({ key }))
     return (
       <FlatList
         style={styles.list}
@@ -44,21 +44,21 @@ class MainScreen extends React.Component {
           />
         )}
       />
-    );
+    )
   }
 }
 
-const ItemSeparator = () => <View style={styles.separator} />;
+const ItemSeparator = () => <View style={styles.separator} />
 
 class MainScreenItem extends React.Component {
   _onPress = () => this.props.onPressItem(this.props.item);
   render() {
-    const { key } = this.props.item;
+    const { key } = this.props.item
     return (
       <TouchableOpacity style={styles.button} onPress={this._onPress}>
         <Text style={styles.buttonText}>{SCREENS[key].title || key}</Text>
       </TouchableOpacity>
-    );
+    )
   }
 }
 
@@ -70,7 +70,7 @@ const ExampleApp = createAppContainer(createStackNavigator(
   {
     initialRouteName: 'Main',
   }
-));
+))
 
 const styles = StyleSheet.create({
   list: {
@@ -91,6 +91,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff',
   },
-});
+})
 
-export default ExampleApp;
+export default ExampleApp

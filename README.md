@@ -1,5 +1,6 @@
 ## Reanimated Bottom Sheet
-Component imitating native bottom sheet behavior built from scratch with react-native-gesture-handler and react-native-reanimated.
+Highly configurable component imitating native bottom sheet behavior built from scratch with react-native-gesture-handler and react-native-reanimated.
+No JS animations, 60 FPS!
 
 Usable with Expo with no extra native dependencies!
 
@@ -70,7 +71,7 @@ this.bottomSheet.current.snaptTo(0)
 ```
 
 ## Example
-Few more complicated examples could be found in `Example` folder which is simple Expo app
+Few more complicated examples can be found in `Example` folder
 
 ```javascript
 cd Example

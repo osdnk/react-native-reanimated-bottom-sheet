@@ -1,6 +1,6 @@
-import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import BottomSheet from 'reanimated-bottom-sheet';
+import React from 'react'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import BottomSheet from 'reanimated-bottom-sheet'
 
 
 
@@ -60,7 +60,7 @@ export default class Example extends React.Component {
   }
 }
 
-const IMAGE_SIZE = 200;
+const IMAGE_SIZE = 200
 
 const styles = StyleSheet.create({
   container: {
@@ -98,8 +98,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.4,
   },
   header: {
-      width: '100%',
-      height: 50,
+    width: '100%',
+    height: 50,
   },
   panelHeader: {
     alignItems: 'center',
@@ -142,5 +142,5 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%',
   },
-});
+})
 
