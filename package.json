@@ -1,0 +1,31 @@
+
+{
+  "name": "reanimated-bottom-sheet",
+  "version": "1.0.0-alpha.1",
+  "description": "Bottom sheet component",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "react-native",
+    "bottom-sheet",
+    "reanimated",
+    "gesture",
+    "handler"
+  ],
+  "files": ["index.js, README.md"],
+  "author": "Michał Osadnik",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/osdnk/reanimated-bottom-sheet.git"
+  },
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "peerDependencies": {
+    "react": "*",
+    "react-native": "*",
+    "react-native-reanimated": "*",
+    "react-native-gesture-handler": "*"
+  }
+}
