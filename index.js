@@ -273,7 +273,7 @@ export default class BottomSheetBehavior extends Component {
         set(limitedVal, add(limitedVal, sub(val, prev))),
         cond(lessThan(limitedVal, min), set(limitedVal, min)),
       ]),
-      set(prevState, this.panState), // some iOS shit
+      set(prevState, this.panState), //on iOS sometimes BEGAN event does not trigger
       set(diffPres, sub(prev, val)),
       set(prev, val),
       cond(or(greaterOrEq(limitedVal, 0),
