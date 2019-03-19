@@ -79,6 +79,8 @@ yarn
 expo start
 ```
 
+Project is also available on [Expo](https://expo.io/@osdnk/reanimated-bottomsheet-expample).
+
 ## Todo
 It's not very finished and some work has to be done yet.
 1. Play with magic config values
