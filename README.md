@@ -1,6 +1,7 @@
-## Reanimated Bottom Sheet
-Highly configurable component imitating native bottom sheet behavior built from scratch with react-native-gesture-handler and react-native-reanimated.
-No JS animations, 60 FPS!
+# Reanimated Bottom Sheet
+Highly configurable component imitating [native bottom sheet behavior](https://material.io/design/components/sheets-bottom.html#standard-bottom-sheet), with fully native 60 FPS animations!
+
+Built from scratch with [react-native-gesture-handler](https://github.com/kmagiera/react-native-gesture-handler) and [react-native-reanimated](https://github.com/kmagiera/react-native-reanimated).
 
 Usable with Expo with no extra native dependencies!
 
@@ -9,19 +10,25 @@ Usable with Expo with no extra native dependencies!
 
 
 ## Installation
-Make sure that you have previously installed and linked [react-native-gesture-handler](https://kmagiera.github.io/react-native-gesture-handler/docs/getting-started.html) and [react-native-reanimated](https://github.com/kmagiera/react-native-reanimated) and then:
 
-```
+Open a Terminal in the project root and run:
+
+```sh
 yarn add reanimated-bottom-sheet
 ```
 
-or:
-```
+or if you use `npm`:
+
+```sh
 npm install reanimated-bottom-sheet
 ```
 
+If you are using Expo, you are done.
+
+If you don't use Expo, install and link [react-native-gesture-handler](https://kmagiera.github.io/react-native-gesture-handler/docs/getting-started.html) and [react-native-reanimated](https://github.com/kmagiera/react-native-reanimated).
 
 ## Usage
+
 ```javascript
 import BottomSheet from 'reanimated-bottom-sheet'
 
@@ -45,7 +52,6 @@ class Example extends React.Component {
     </View>)
   }
 }
-
 ```
 
 ## Props
@@ -63,26 +69,34 @@ class Example extends React.Component {
 
 
 ## Methods
+
 ### `snapTo(index)`
-Imperative command for snapping to snap point in given index. E.g.
+
+Imperative method on for snapping to snap point in given index. E.g.
 
 ```javascript
-this.bottomSheet.current.snapTo(0)
+// Snap to the snap point at index 0 (e.g. 450 in [450, 300, 0])
+this.bottomSheetRef.current.snapTo(0)
 ```
 
-## Example
-Few more complicated examples can be found in `Example` folder
+Here `this.bottomSheetRef` refers [to the `ref`](https://reactjs.org/docs/react-api.html#reactcreateref) passed to the `BottomSheet` component.
 
-```javascript
+## Example
+
+More complex examples can be found in the `Example` folder. To view the examples in the [Expo app](https://expo.io/), open a Terminal and run:
+
+```sh
 cd Example
 yarn
 expo start
 ```
 
-Project is also available on [Expo](https://expo.io/@osdnk/reanimated-bottomsheet-expample).
+The example app is also available on [Expo](https://expo.io/@osdnk/reanimated-bottomsheet-expample).
 
 ## Todo
-It's not very finished and some work has to be done yet.
+
+It's not finished and some work has to be done yet.
+
 1. Play with magic config values
 2. Horizontal mode
 3. Deal with GH in inner scrollView
