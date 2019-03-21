@@ -28,5 +28,8 @@ declare module 'reanimated-bottom-sheet' {
     callbackNode?: Animated.Node<any>;
   }
 
-  export default class BottomSheet extends React.Component<BottomSheetProps> {}
+  export default class BottomSheet extends React.Component<BottomSheetProps> {
+    /** Snap to the snap point at index (e.g. index 0 is 450 in [450, 300, 0]) */
+    snapTo: (index: number) => void;
+  }
 }
