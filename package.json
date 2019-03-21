@@ -1,4 +1,3 @@
-
 {
   "name": "reanimated-bottom-sheet",
   "version": "1.0.0-alpha.1",
@@ -15,7 +14,11 @@
     "gesture",
     "handler"
   ],
-  "files": ["index.js", "reanimated-bottom-sheet.d.ts", "README.md"],
+  "files": [
+    "index.js",
+    "reanimated-bottom-sheet.d.ts",
+    "README.md"
+  ],
   "author": "Michał Osadnik",
   "repository": {
     "type": "git",
@@ -26,12 +29,13 @@
   "peerDependencies": {
     "react": "*",
     "react-native": "*",
-    "react-native-reanimated": "*",
-    "react-native-gesture-handler": "*"
+    "react-native-gesture-handler": "*",
+    "react-native-reanimated": "*"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.1",
     "eslint": "^5.15.1",
-    "eslint-plugin-react": "^7.12.4"
+    "eslint-plugin-react": "^7.12.4",
+    "react-native-reanimated": "^1.0.0-alpha.12"
   }
 }
