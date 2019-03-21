@@ -4,6 +4,7 @@
   "version": "1.0.0-alpha.1",
   "description": "Bottom sheet component",
   "main": "index.js",
+  "types": "reanimated-bottom-sheet.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -14,7 +15,7 @@
     "gesture",
     "handler"
   ],
-  "files": ["index.js, README.md"],
+  "files": ["index.js", "reanimated-bottom-sheet.d.ts", "README.md"],
   "author": "Michał Osadnik",
   "repository": {
     "type": "git",
