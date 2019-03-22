@@ -12,7 +12,7 @@ declare module 'reanimated-bottom-sheet' {
     /** Method for rendering scrollable content of bottom sheet. */
     renderContent?: () => React.ReactElement | null;
 
-    /**  Method for rendering non-scrollable header of bottom sheet. */
+    /** Method for rendering non-scrollable header of bottom sheet. */
     renderHeader?: () => React.ReactElement | null;
 
     /** Defines if bottom sheet could be scrollable by gesture. Defaults to true. */
