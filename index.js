@@ -380,7 +380,9 @@ export default class BottomSheetBehavior extends Component {
       heightOfHeaderAnimated: (state && state.heightOfHeaderAnimated) || new Value(0),
       heightOfContent: (state && state.heightOfContent) || new Value(0),
       initSnap: sortedPropsSnapPints[0].val,
-      snapPoints
+      snapPoints,
+      heightOfHeader: (state && state.heightOfHeader) || 0
+
     }
   }
 
