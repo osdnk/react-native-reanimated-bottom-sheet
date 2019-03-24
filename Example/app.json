@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "scroll-imitate",
-    "slug": "scroll-imitate",
+    "name": "Reanimated BottomSheet example",
+    "slug": "reanimated-bottomsheet-example",
     "privacy": "public",
     "sdkVersion": "32.0.0",
     "platforms": [
@@ -24,6 +24,8 @@
     ],
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "description": "",
+    "githubUrl": "https://github.com/osdnk/reanimated-bottom-sheet"
   }
 }
