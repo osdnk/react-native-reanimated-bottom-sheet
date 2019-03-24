@@ -38,7 +38,7 @@ const {
 } = magic
 
 
-const { set, cond, onChange, block, eq, greaterOrEq, not, defined, max, add, and, Value, spring, or, divide, greaterThan, sub, event, diff, multiply, clockRunning, startClock, stopClock, decay, Clock, lessThan } = Animated
+const { set, cond, onChange, block, eq, greaterOrEq, sqrt, not, defined, max, add, and, Value, spring, or, divide, greaterThan, sub, event, diff, multiply, clockRunning, startClock, stopClock, decay, Clock, lessThan } = Animated
 
 
 function runDecay(clock, value, velocity, wasStartedFromBegin) {
@@ -109,45 +109,14 @@ function withDecaying(drag, state, decayClock, velocity, prevent) {
   ])
 }
 
-function runSpring(clock, value, velocity, dest, wasRun = 0, isManuallySet = 0) {
-  const state = {
-    finished: new Value(0),
-    velocity: new Value(0),
-    position: new Value(0),
-    time: new Value(0),
-  }
-
-  const config = {
-    damping,
-    mass,
-    stiffness,
-    overshootClamping,
-    restSpeedThreshold,
-    restDisplacementThreshold,
-    toValue: new Value(0),
-  }
-
-  return [
-    cond(clockRunning(clock), 0, [
-      set(state.finished, 0),
-      set(state.velocity, velocity),
-      set(state.position, value),
-      set(config.toValue, dest),
-      cond(and(wasRun, not(isManuallySet)), 0, startClock(clock)),
-      cond(defined(wasRun), set(wasRun, 1)),
-    ]),
-    spring(clock, state, config),
-    cond(state.finished, stopClock(clock)),
-    state.position,
-  ]
-}
-
 export default class BottomSheetBehavior extends Component {
   static defaultProps = {
+    overdragResistanceFactor: 0,
     initialSnap: 0,
     enabledImperativeSnapping: true,
     enabledGestureInteraction: true,
-    enabledInnerScrolling: true
+    enabledInnerScrolling: true,
+    springConfig: {},
   };
 
   decayClock = new Clock();
@@ -197,7 +166,7 @@ export default class BottomSheetBehavior extends Component {
             [
               cond(this.isManuallySetValue, stopClock(masterClock)),
               set(masterOffseted,
-                runSpring(masterClock, masterOffseted, this.masterVelocity,
+                this.runSpring(masterClock, masterOffseted, this.masterVelocity,
                   cond(this.isManuallySetValue, this.manuallySetValue, this.snapPoint),
                   wasRun, this.isManuallySetValue)
               ),
@@ -210,15 +179,21 @@ export default class BottomSheetBehavior extends Component {
           set(this.preventDecaying, 1),
           set(masterOffseted, add(masterOffseted, sub(this.dragMasterY, prevMasterDrag))),
           set(prevMasterDrag, this.dragMasterY),
+          set(wasRun, 0), // not sure about this move for cond-began
           cond(eq(this.panMasterState, State.BEGAN),
-            [
-              stopClock(this.masterClockForOverscroll),
-              set(wasRun, 0),
-            ]
+            stopClock(this.masterClockForOverscroll),
           ),
         ]
       ),
-      max(masterOffseted, snapPoints[0])
+      cond(greaterThan(masterOffseted, snapPoints[0]), masterOffseted,
+        max(
+          multiply(
+            sub(snapPoints[0], sqrt(add(1, sub(snapPoints[0], masterOffseted)))),
+            props.overdragResistanceFactor
+          ),
+          masterOffseted
+        )
+      )
     ])
 
     this.Y = this.withEnhancedLimits(
@@ -229,6 +204,40 @@ export default class BottomSheetBehavior extends Component {
         this.velocity,
         this.preventDecaying),
       masterOffseted)
+  }
+
+  runSpring(clock, value, velocity, dest, wasRun = 0, isManuallySet = 0) {
+    const state = {
+      finished: new Value(0),
+      velocity: new Value(0),
+      position: new Value(0),
+      time: new Value(0),
+    }
+
+    const config = {
+      damping,
+      mass,
+      stiffness,
+      overshootClamping,
+      restSpeedThreshold,
+      restDisplacementThreshold,
+      toValue: new Value(0),
+      ...this.props.springConfig
+    }
+
+    return [
+      cond(clockRunning(clock), 0, [
+        set(state.finished, 0),
+        set(state.velocity, velocity),
+        set(state.position, value),
+        set(config.toValue, dest),
+        cond(and(wasRun, not(isManuallySet)), 0, startClock(clock)),
+        cond(defined(wasRun), set(wasRun, 1)),
+      ]),
+      spring(clock, state, config),
+      cond(state.finished, stopClock(clock)),
+      state.position,
+    ]
   }
 
   handleMasterPan = event([{
@@ -292,7 +301,7 @@ export default class BottomSheetBehavior extends Component {
         cond(and(eq(this.panState, State.END), not(wasEndedMasterAfterInner), not(eq(this.panMasterState, State.ACTIVE)), not(eq(this.panMasterState, State.BEGAN)), or(clockRunning(this.masterClockForOverscroll), not(wasRunMaster))), [
           // cond(justEndedIfEnded, set(this.masterVelocity, diff(val))),
           set(this.masterVelocity, cond(justEndedIfEnded, diff(val), this.velocity)),
-          set(masterOffseted, runSpring(this.masterClockForOverscroll, masterOffseted, diff(val), this.snapPoint, wasRunMaster)),
+          set(masterOffseted, this.runSpring(this.masterClockForOverscroll, masterOffseted, diff(val), this.snapPoint, wasRunMaster)),
           set(this.masterVelocity, 0)
         ]),
         //   cond(eq(this.panState, State.END), set(wasEndedMasterAfterInner, 0)),
@@ -463,8 +472,8 @@ export default class BottomSheetBehavior extends Component {
             <Animated.Code
               exec={onChange(this.tapState, cond(eq(this.tapState, State.BEGAN), stopClock(this.decayClock)))}/>
             {this.props.callbackNode &&
-          <Animated.Code
-            exec={onChange(this.translateMaster, set(this.props.callbackNode, divide(this.translateMaster, this.state.snapPoints[this.state.snapPoints.length - 1])))}/>}
+            <Animated.Code
+              exec={onChange(this.translateMaster, set(this.props.callbackNode, divide(this.translateMaster, this.state.snapPoints[this.state.snapPoints.length - 1])))}/>}
           </View>
         </Animated.View>
       </React.Fragment>

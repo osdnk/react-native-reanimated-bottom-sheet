@@ -64,8 +64,10 @@ class Example extends React.Component {
 | renderHeader              | no       |         | Method for rendering non-scrollable header of bottom sheet. |
 | enabledGestureInteraction | no       | `true`  | Defines if bottom sheet could be scrollable by gesture. | 
 | enabledManualSnapping     | no       | `true`  | If `false` blocks snapping using `snapTo` method. | 
-| enabledInnerScrolling     | no       | `true`  | Defines whether it's possible to scroll inner content of bottom sheet.
-| callbackNode              | no       |         | `reanimated` node which holds position of bottom sheet, where `0` it the highest snap point and `1` is the lowest.  
+| enabledInnerScrolling     | no       | `true`  | Defines whether it's possible to scroll inner content of bottom sheet. |
+| callbackNode              | no       |         | `reanimated` node which holds position of bottom sheet, where `0` it the highest snap point and `1` is the lowest. |
+| overdragResistanceFactor  | no       |   0     | `Defines how violently sheet has to stopped while overdragging. 0 means no overdrag |  
+| springConfig              | no       | `{ }`   | Overrides config for spring animation | 
 
 
 ## Methods

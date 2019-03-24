@@ -25,7 +25,13 @@ declare module 'reanimated-bottom-sheet' {
     enabledInnerScrolling?: boolean;
 
     /** Reanimated node which holds position of bottom sheet, where 1 it the highest snap point and 0 is the lowest. */
-    callbackNode?: Animated.Node<any>;
+    callbackNode?: Animated.Value<number>;
+
+    /** Defines how violently sheet has to stopped while overdragging. 0 means no overdrag. Defaults to 0. */
+    overdragResistanceFactor?: number;
+
+    /** Overrides config for spring animation */
+    springConfig?: object;
   }
 
   export default class BottomSheet extends React.Component<BottomSheetProps> {
