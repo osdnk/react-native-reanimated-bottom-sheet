@@ -438,7 +438,7 @@ export default class BottomSheetBehavior extends Component {
           </PanGestureHandler>
           <View
             style={{
-              height: this.props.snapPoints[0] - this.state.heightOfHeader,
+              height: this.state.initSnap - this.state.heightOfHeader,
               overflow: 'hidden'
             }}
           >
