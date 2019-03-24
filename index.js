@@ -355,7 +355,7 @@ export default class BottomSheetBehavior extends Component {
         height
       }
     }
-  }) => this.state.heightOfContent.setValue(height - this.props.snapPoints[0]);
+  }) => this.state.heightOfContent.setValue(height - this.state.initSnap);
 
 
   static renumber = str => Number(str.split('%')[0]) * screenHeight / 100
