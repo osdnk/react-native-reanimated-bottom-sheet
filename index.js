@@ -437,12 +437,10 @@ export default class BottomSheetBehavior extends Component {
             </Animated.View>
           </PanGestureHandler>
           <View
-            style={{
+            style={this.props.enabledInnerScrolling && {
               height: this.state.initSnap - this.state.heightOfHeader,
-              overflow: 'hidden'
-            }}
-          >
-
+              overflow: 'hidden',
+            }}>
             <PanGestureHandler
               enabled={this.props.enabledGestureInteraction}
               waitFor={this.master}
