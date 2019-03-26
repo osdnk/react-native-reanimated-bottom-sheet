@@ -411,6 +411,7 @@ export default class BottomSheetBehavior extends Component {
           width: '100%',
           position: 'absolute',
           zIndex: 100,
+          opacity: cond(this.height, 1, 0),
           transform: [
             {
               translateY: this.translateMaster
