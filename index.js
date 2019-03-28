@@ -189,8 +189,8 @@ export default class BottomSheetBehavior extends Component {
         max(
           multiply(
             sub(snapPoints[0], sqrt(add(1, sub(snapPoints[0], masterOffseted)))),
-            props.overdragResistanceFactor
-          ),
+            !props.enabledInnerScrolling ? props.overdragResistanceFactor : 0
+            ),
           masterOffseted
         )
       )
