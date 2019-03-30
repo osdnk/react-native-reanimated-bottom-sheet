@@ -32,6 +32,9 @@ declare module 'reanimated-bottom-sheet' {
 
     /** Overrides config for spring animation */
     springConfig?: object;
+
+    /** Refs for gesture handlers used for building bottomsheet */
+    innerGestureHandlerRefs: object[]
   }
 
   export default class BottomSheet extends React.Component<BottomSheetProps> {

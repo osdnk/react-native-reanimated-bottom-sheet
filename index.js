@@ -117,6 +117,7 @@ export default class BottomSheetBehavior extends Component {
     enabledGestureInteraction: true,
     enabledInnerScrolling: true,
     springConfig: {},
+    innerGestureHandlerRefs: [ React.createRef(), React.createRef(), React.createRef() ],
   };
 
   decayClock = new Clock();
@@ -134,6 +135,9 @@ export default class BottomSheetBehavior extends Component {
 
   constructor(props) {
     super(props)
+    this.panRef = props.innerGestureHandlerRefs[0]
+    this.master = props.innerGestureHandlerRefs[1]
+    this.tapRef = props.innerGestureHandlerRefs[2]
     this.state = BottomSheetBehavior.getDerivedStateFromProps(props)
     const { snapPoints, init } = this.state
     const middlesOfSnapPoints = []
@@ -315,8 +319,6 @@ export default class BottomSheetBehavior extends Component {
     ])
   }
 
-  panRef = React.createRef();
-
   snapTo = index => {
     if (!this.props.enabledImperativeSnapping) {
       return
@@ -395,17 +397,16 @@ export default class BottomSheetBehavior extends Component {
     }
   }
 
-  master = React.createRef();
-
   render() {
     return (
       <React.Fragment>
-        <Animated.View style={{
-          height: '100%',
-          width: 0,
-          position: 'absolute'
-        }}
-        onLayout={this.handleFullHeader}
+        <Animated.View
+          style={{
+            height: '100%',
+            width: 0,
+            position: 'absolute'
+          }}
+          onLayout={this.handleFullHeader}
         />
         <Animated.View style={{
           width: '100%',
@@ -451,6 +452,7 @@ export default class BottomSheetBehavior extends Component {
             >
               <Animated.View>
                 <TapGestureHandler
+                  ref={this.tapRef}
                   enabled={this.props.enabledGestureInteraction}
                   onHandlerStateChange={this.handleTap}
                 >
