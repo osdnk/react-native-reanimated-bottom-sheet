@@ -20,7 +20,7 @@ const magic = {
   deceleration: 0.999,
   bouncyFactor: 1,
   velocityFactor: P(1, 1.2),
-  tossForMaster: 0.4,
+  toss: 0.4,
   coefForTranslatingVelocities: 5
 }
 
@@ -34,7 +34,7 @@ const {
   restDisplacementThreshold,
   deceleration,
   velocityFactor,
-  tossForMaster
+  toss
 } = magic
 
 
@@ -147,6 +147,7 @@ export default class BottomSheetBehavior extends Component {
     const masterOffseted =
       new Value(init)
     // destination point is a approximation of movement if finger released
+    const tossForMaster = props.springConfig.hasOwnProperty('toss') ? props.springConfig.toss : toss
     const destinationPoint = add(masterOffseted, multiply(tossForMaster, this.masterVelocity))
     // method for generating condition for finding the nearest snap point
     const currentSnapPoint = (i = 0) => i + 1 === snapPoints.length ?
