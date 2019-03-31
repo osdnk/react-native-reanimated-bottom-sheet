@@ -7,6 +7,7 @@ import BlurToolbar from './BlurToolbar'
 import Imperative from './Imperative'
 import Test from './Test'
 import Sections from './Sections'
+import Collapsable from './Collapsable';
 
 const SCREENS = {
   map: {
@@ -28,6 +29,10 @@ const SCREENS = {
   sectionList: {
     screen: Sections,
     title: 'SectionList',
+  },
+  collapsable: {
+    screen: Collapsable,
+    title: 'Collapsable Header',
   },
 }
 
