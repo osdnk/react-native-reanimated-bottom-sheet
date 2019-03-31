@@ -473,8 +473,13 @@ export default class BottomSheetBehavior extends Component {
             <Animated.Code
               exec={onChange(this.tapState, cond(eq(this.tapState, State.BEGAN), stopClock(this.decayClock)))}/>
             {this.props.callbackNode &&
-            <Animated.Code
-              exec={onChange(this.translateMaster, set(this.props.callbackNode, divide(this.translateMaster, this.state.snapPoints[this.state.snapPoints.length - 1])))}/>}
+              <Animated.Code
+                exec={onChange(this.translateMaster, set(this.props.callbackNode, divide(this.translateMaster, this.state.snapPoints[this.state.snapPoints.length - 1])))}/>
+            }
+            {this.props.contentPosition &&
+              <Animated.Code
+                exec={onChange(this.Y, set(this.props.contentPosition, sub(0, this.Y)))}/>
+            }
           </View>
         </Animated.View>
       </React.Fragment>

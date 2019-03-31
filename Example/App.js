@@ -6,6 +6,7 @@ import Map from './Map'
 import BlurToolbar from './BlurToolbar'
 import Imperative from './Imperative'
 import Test from './Test'
+import Sections from './Sections'
 
 const SCREENS = {
   map: {
@@ -23,6 +24,10 @@ const SCREENS = {
   test: {
     screen: Test,
     title: 'Test',
+  },
+  sectionList: {
+    screen: Sections,
+    title: 'SectionList',
   },
 }
 

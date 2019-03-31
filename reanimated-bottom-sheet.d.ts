@@ -27,7 +27,10 @@ declare module 'reanimated-bottom-sheet' {
     /** Reanimated node which holds position of bottom sheet, where 1 it the highest snap point and 0 is the lowest. */
     callbackNode?: Animated.Value<number>;
 
-    /** Defines how violently sheet has to stopped while overdragging. 0 means no overdrag. Defaults to 0. */
+    /** Reanimated node which holds position of bottom sheet;s content (in dp). */
+    contentPosition?: Animated.Value<number>;
+
+      /** Defines how violently sheet has to stopped while overdragging. 0 means no overdrag. Defaults to 0. */
     overdragResistanceFactor?: number;
 
     /** Overrides config for spring animation */
