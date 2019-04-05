@@ -2,10 +2,13 @@
   "name": "reanimated-bottom-sheet",
   "version": "1.0.0-alpha.8",
   "description": "Bottom sheet component",
-  "main": "index.js",
+  "main": "lib/commonjs/index.js",
+  "module": "lib/module/index.js",
+  "react-native": "src/index.js",
   "types": "reanimated-bottom-sheet.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "bob build"
   },
   "keywords": [
     "react-native",
@@ -15,7 +18,8 @@
     "handler"
   ],
   "files": [
-    "index.js",
+    "lib/",
+    "src/",
     "reanimated-bottom-sheet.d.ts",
     "README.md"
   ],
@@ -25,7 +29,6 @@
     "url": "git+https://github.com/osdnk/reanimated-bottom-sheet.git"
   },
   "license": "MIT",
-  "readmeFilename": "README.md",
   "peerDependencies": {
     "react": "*",
     "react-native": "*",
@@ -33,9 +36,18 @@
     "react-native-reanimated": "*"
   },
   "devDependencies": {
+    "@react-native-community/bob": "^0.3.3",
     "babel-eslint": "^10.0.1",
     "eslint": "^5.15.1",
     "eslint-plugin-react": "^7.12.4",
     "react-native-reanimated": "^1.0.0-alpha.12"
+  },
+  "@react-native-community/bob": {
+    "source": "src",
+    "output": "lib",
+    "targets": [
+      "commonjs",
+      "module"
+    ]
   }
 }
