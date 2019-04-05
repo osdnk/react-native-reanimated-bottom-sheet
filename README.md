@@ -56,20 +56,20 @@ class Example extends React.Component {
 
 ## Props
 
-| name                      | required | default | description | 
+| name                      | required | default | description |
 | ------------------------- | -------- | ------- | ------------|
 | snapPoints                | yes      |         | E.g. `[300, 200, 0]`. Points for snapping of bottom sheet coomponent. They define distance from bottom of the screen. Might be number or percent (as string e.g. `'20%'`) for points or percents of screen height from bottom. |
 | initialSnap               | no       |    0    | Determines initial snap point of bottom sheet. The value is the index from snapPoints. |
 | renderContent             | no       |         | Method for rendering scrollable content of bottom sheet. |
 | renderHeader              | no       |         | Method for rendering non-scrollable header of bottom sheet. |
-| enabledGestureInteraction | no       | `true`  | Defines if bottom sheet could be scrollable by gesture. | 
-| enabledManualSnapping     | no       | `true`  | If `false` blocks snapping using `snapTo` method. | 
+| enabledGestureInteraction | no       | `true`  | Defines if bottom sheet could be scrollable by gesture. |
+| enabledManualSnapping     | no       | `true`  | If `false` blocks snapping using `snapTo` method. |
 | enabledInnerScrolling     | no       | `true`  | Defines whether it's possible to scroll inner content of bottom sheet. |
 | callbackNode              | no       |         | `reanimated` node which holds position of bottom sheet, where `0` it the highest snap point and `1` is the lowest. |
 | contentPosition           | no       |         | `reanimated` node which holds position of bottom sheet's content (in dp) |
-| overdragResistanceFactor  | no       |   0     | `Defines how violently sheet has to stopped while overdragging. 0 means no overdrag |  
-| springConfig              | no       | `{ }`   | Overrides config for spring animation | 
-| innerGestureHandlerRefs   | no       |         | Refs for gesture handlers used for building bottom sheet. The array consists fo three refs. The first for PanGH used for inner content scrolling. The second for PanGH used for header. The third for TapGH used for stopping scrolling the content.   | 
+| overdragResistanceFactor  | no       |   0     | `Defines how violently sheet has to stopped while overdragging. 0 means no overdrag |
+| springConfig              | no       | `{ }`   | Overrides config for spring animation |
+| innerGestureHandlerRefs   | no       |         | Refs for gesture handlers used for building bottom sheet. The array consists fo three refs. The first for PanGH used for inner content scrolling. The second for PanGH used for header. The third for TapGH used for stopping scrolling the content.   |
 
 
 ## Methods
@@ -105,3 +105,15 @@ It's not finished and some work has to be done yet.
 2. Horizontal mode
 3. Deal with GH in inner scrollView
 4. Cleanup code (e.g. measuring of components)
+
+## Contributing
+
+### Publishing a release
+
+We use [release-it](https://github.com/release-it/release-it) to automate our release. If you have publish access to the NPM package, run the following from the master branch to publish a new release:
+
+```sh
+yarn release
+```
+
+NOTE: You must have a `GITHUB_TOKEN` environment variable available. You can create a GitHub access token with the "repo" access [here](https://github.com/settings/tokens).
