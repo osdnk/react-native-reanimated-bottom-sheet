@@ -2,8 +2,6 @@ import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import BottomSheet from 'reanimated-bottom-sheet'
 
-
-
 export default class Example extends React.Component {
   renderInner = () => (
     <View style={styles.panel}>
@@ -26,32 +24,49 @@ export default class Example extends React.Component {
         <Text style={styles.panelButtonTitle}>Clicked</Text>
       </TouchableOpacity>
     </View>
-  );
+  )
 
   bs = React.createRef()
-
 
   render() {
     return (
       <View style={styles.container}>
         <BottomSheet
           ref={this.bs}
-          snapPoints = {[500, 200, 100, 0]}
-          renderContent = {this.renderInner}
-          initialSnap = {1}
+          snapPoints={[500, 200, 100, 0]}
+          renderContent={this.renderInner}
+          initialSnap={1}
           enabledGestureInteraction={false}
         />
-        <View style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between'}}>
-          <TouchableOpacity style={styles.commandButton} onPress={() => this.bs.current.snapTo(0)}>
+        <View
+          style={{
+            alignItems: 'center',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}
+        >
+          <TouchableOpacity
+            style={styles.commandButton}
+            onPress={() => this.bs.current.snapTo(0)}
+          >
             <Text style={styles.panelButtonTitle}>1</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.commandButton} onPress={() => this.bs.current.snapTo(1)}>
+          <TouchableOpacity
+            style={styles.commandButton}
+            onPress={() => this.bs.current.snapTo(1)}
+          >
             <Text style={styles.panelButtonTitle}>2</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.commandButton} onPress={() => this.bs.current.snapTo(2)}>
+          <TouchableOpacity
+            style={styles.commandButton}
+            onPress={() => this.bs.current.snapTo(2)}
+          >
             <Text style={styles.panelButtonTitle}>3</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.commandButton} onPress={() => this.bs.current.snapTo(3)}>
+          <TouchableOpacity
+            style={styles.commandButton}
+            onPress={() => this.bs.current.snapTo(3)}
+          >
             <Text style={styles.panelButtonTitle}>4</Text>
           </TouchableOpacity>
         </View>
@@ -143,4 +158,3 @@ const styles = StyleSheet.create({
     width: '100%',
   },
 })
-

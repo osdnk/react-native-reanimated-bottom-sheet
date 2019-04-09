@@ -1,5 +1,11 @@
 import React from 'react'
-import { Text, View, FlatList, StyleSheet, TouchableOpacity } from 'react-native'
+import {
+  Text,
+  View,
+  FlatList,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native'
 import { createStackNavigator, createAppContainer } from 'react-navigation'
 
 import Map from './Map'
@@ -7,7 +13,7 @@ import BlurToolbar from './BlurToolbar'
 import Imperative from './Imperative'
 import Test from './Test'
 import Sections from './Sections'
-import Collapsable from './Collapsable';
+import Collapsable from './Collapsable'
 
 const SCREENS = {
   map: {
@@ -39,7 +45,7 @@ const SCREENS = {
 class MainScreen extends React.Component {
   static navigationOptions = {
     title: 'Bottom Sheet Examples',
-  };
+  }
   render() {
     const data = Object.keys(SCREENS).map(key => ({ key }))
     return (
@@ -61,7 +67,7 @@ class MainScreen extends React.Component {
 const ItemSeparator = () => <View style={styles.separator} />
 
 class MainScreenItem extends React.Component {
-  _onPress = () => this.props.onPressItem(this.props.item);
+  _onPress = () => this.props.onPressItem(this.props.item)
   render() {
     const { key } = this.props.item
     return (
@@ -72,15 +78,17 @@ class MainScreenItem extends React.Component {
   }
 }
 
-const ExampleApp = createAppContainer(createStackNavigator(
-  {
-    Main: { screen: MainScreen },
-    ...SCREENS,
-  },
-  {
-    initialRouteName: 'Main',
-  }
-))
+const ExampleApp = createAppContainer(
+  createStackNavigator(
+    {
+      Main: { screen: MainScreen },
+      ...SCREENS,
+    },
+    {
+      initialRouteName: 'Main',
+    }
+  )
+)
 
 const styles = StyleSheet.create({
   list: {
