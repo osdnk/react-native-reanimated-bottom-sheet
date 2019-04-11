@@ -3,7 +3,6 @@ import { Image, StyleSheet, Text, View } from 'react-native'
 import BottomSheet from 'reanimated-bottom-sheet'
 import Animated from 'react-native-reanimated'
 
-
 export default class Example extends React.Component {
   renderInner = () => (
     <View style={styles.panel}>
@@ -23,11 +22,9 @@ export default class Example extends React.Component {
         <Text style={styles.panelButtonTitle}>Send</Text>
       </View>
     </View>
-  );
-
-  renderHeader = () => (
-    <View style={styles.header}/>
   )
+
+  renderHeader = () => <View style={styles.header} />
 
   fall = new Animated.Value(1)
 
@@ -35,19 +32,23 @@ export default class Example extends React.Component {
     return (
       <View style={styles.container}>
         <BottomSheet
-          snapPoints = {[500, 50]}
-          renderContent = {this.renderInner}
-          renderHeader = {this.renderHeader}
-          initialSnap = {1}
+          snapPoints={[500, 50]}
+          renderContent={this.renderInner}
+          renderHeader={this.renderHeader}
+          initialSnap={1}
           callbackNode={this.fall}
           enabledInnerScrolling={false}
         />
-        <Animated.View style={{ alignItems: 'center', opacity: Animated.add(0.1,Animated.multiply(this.fall, 0.9)) }}>
+        <Animated.View
+          style={{
+            alignItems: 'center',
+            opacity: Animated.add(0.1, Animated.multiply(this.fall, 0.9)),
+          }}
+        >
           <Text style={{ position: 'absolute', zIndex: 1 }}>
             Swipe up from very bottom
           </Text>
           <Image style={styles.map} source={require('./assets/map-bg.jpg')} />
-
         </Animated.View>
       </View>
     )
@@ -130,4 +131,3 @@ const styles = StyleSheet.create({
     width: '100%',
   },
 })
-

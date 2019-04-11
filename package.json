@@ -8,6 +8,7 @@
   "types": "reanimated-bottom-sheet.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint .",
     "release": "release-it",
     "prepare": "bob build"
   },
@@ -43,8 +44,11 @@
     "commitlint": "^7.5.2",
     "conventional-changelog-cli": "^2.0.12",
     "eslint": "^5.15.1",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-react": "^7.12.4",
     "husky": "^1.3.1",
+    "prettier": "^1.16.4",
     "react-native-reanimated": "^1.0.0-alpha.12",
     "release-it": "^10.4.0"
   },

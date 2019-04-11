@@ -1,8 +1,12 @@
 import React from 'react'
-import { Image, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native'
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native'
 import BottomSheet from 'reanimated-bottom-sheet'
-
-
 
 export default class Example extends React.Component {
   renderInner = () => (
@@ -22,7 +26,7 @@ export default class Example extends React.Component {
         source={require('./assets/airport-photo.jpg')}
       />
     </View>
-  );
+  )
 
   renderHeader = () => (
     <View style={styles.header}>
@@ -39,15 +43,14 @@ export default class Example extends React.Component {
       <View style={styles.container}>
         <BottomSheet
           ref={this.bs}
-          snapPoints = {[500, 250, 0]}
-          renderContent = {this.renderInner}
-          renderHeader = {this.renderHeader}
-          initialSnap = {1}
+          snapPoints={[500, 250, 0]}
+          renderContent={this.renderInner}
+          renderHeader={this.renderHeader}
+          initialSnap={1}
         />
         <TouchableWithoutFeedback onPress={() => this.bs.current.snapTo(0)}>
           <Image style={styles.map} source={require('./assets/map-bg.jpg')} />
         </TouchableWithoutFeedback>
-
       </View>
     )
   }
@@ -75,7 +78,6 @@ const styles = StyleSheet.create({
     height: 600,
     padding: 20,
     backgroundColor: '#f7f5eee8',
-
   },
   header: {
     backgroundColor: '#f7f5eee8',
@@ -126,4 +128,3 @@ const styles = StyleSheet.create({
     width: '100%',
   },
 })
-
