@@ -3,13 +3,13 @@ module.exports = {
     browser: true,
     es6: true,
   },
-  parser: 'babel-eslint',
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
     'eslint-config-prettier',
     'eslint-config-prettier/react',
   ],
+  plugins: ['react', 'prettier'],
   settings: {
     react: {
       pragma: 'React',
@@ -23,14 +23,31 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module',
   },
-  plugins: ['react', 'prettier'],
   rules: {
     'max-len': ['off', 80],
     'no-undef': 'off',
     'linebreak-style': ['error', 'unix'],
-
-    'react/prop-types': 'off',
-
     'prettier/prettier': 'error',
+    'react/prop-types': 'off',
   },
-}
+  overrides: [
+    {
+      files: ['*.js'],
+      parser: 'babel-eslint',
+    },
+    {
+      files: ['*.ts', '*.tsx'],
+      parser: '@typescript-eslint/parser',
+      plugins: ['@typescript-eslint/eslint-plugin'],
+      rules: {
+        '@typescript-eslint/no-unused-vars': [
+          'error',
+          { argsIgnorePattern: '^_' },
+        ],
+
+        'no-dupe-class-members': 'off',
+        'no-unused-vars': 'off',
+      },
+    },
+  ],
+};

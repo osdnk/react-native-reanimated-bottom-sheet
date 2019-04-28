@@ -4,11 +4,12 @@
   "description": "Bottom sheet component",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
-  "react-native": "src/index.js",
-  "types": "reanimated-bottom-sheet.d.ts",
+  "react-native": "lib/module/index.js",
+  "types": "lib/typescript/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint .",
+    "lint": "eslint --ext .js,.ts,.tsx .",
+    "typescript": "tsc --noEmit",
     "release": "release-it",
     "prepare": "bob build"
   },
@@ -39,21 +40,28 @@
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^7.5.0",
-    "@react-native-community/bob": "^0.3.3",
+    "@react-native-community/bob": "^0.4.1",
+    "@types/react": "^16.8.14",
+    "@types/react-native": "^0.57.50",
+    "@typescript-eslint/eslint-plugin": "^1.7.0",
+    "@typescript-eslint/parser": "^1.7.0",
     "babel-eslint": "^10.0.1",
     "commitlint": "^7.5.2",
     "conventional-changelog-cli": "^2.0.12",
-    "eslint": "^5.15.1",
-    "eslint-config-prettier": "^4.1.0",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.2.0",
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-react": "^7.12.4",
     "husky": "^1.3.1",
-    "prettier": "^1.16.4",
-    "react-native-reanimated": "^1.0.0-alpha.12",
-    "release-it": "^10.4.0"
+    "prettier": "^1.17.0",
+    "react-native-gesture-handler": "^1.1.0",
+    "react-native-reanimated": "^1.0.1",
+    "release-it": "^10.4.0",
+    "typescript": "^3.4.5"
   },
   "husky": {
     "hooks": {
+      "pre-commit": "yarn lint && yarn typescript",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   },
@@ -62,7 +70,8 @@
     "output": "lib",
     "targets": [
       "commonjs",
-      "module"
+      "module",
+      "typescript"
     ]
   }
 }
