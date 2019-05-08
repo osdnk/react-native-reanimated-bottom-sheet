@@ -1,14 +1,102 @@
-import React, { Component } from 'react'
-import { Dimensions, Platform, View } from 'react-native'
+import * as React from 'react'
+import { Dimensions, Platform, View, LayoutChangeEvent } from 'react-native'
 import Animated from 'react-native-reanimated'
 import {
   PanGestureHandler,
   TapGestureHandler,
-  State,
+  State as GestureState,
 } from 'react-native-gesture-handler'
+
+type Props = {
+  /**
+   * Points for snapping of bottom sheet component. They define distance from bottom of the screen.
+   * Might be number or percent (as string e.g. '20%') for points or percents of screen height from bottom.
+   */
+  snapPoints: number[]
+
+  /**
+   * Determines initial snap point of bottom sheet. Defaults to 0.
+   */
+  initialSnap: number
+
+  /**
+   * Method for rendering scrollable content of bottom sheet.
+   */
+  renderContent?: () => React.ReactNode
+
+  /**
+   * Method for rendering non-scrollable header of bottom sheet.
+   */
+  renderHeader?: () => React.ReactNode
+
+  /**
+   * Defines if bottom sheet could be scrollable by gesture. Defaults to true.
+   */
+  enabledGestureInteraction?: boolean
+
+  /**
+   * If false blocks snapping using snapTo method. Defaults to true.
+   */
+  enabledManualSnapping?: boolean
+
+  /**
+   * Defines whether it's possible to scroll inner content of bottom sheet. Defaults to true.
+   */
+  enabledInnerScrolling?: boolean
+
+  /**
+   * Reanimated node which holds position of bottom sheet, where 1 it the highest snap point and 0 is the lowest.
+   */
+  callbackNode?: Animated.Value<number>
+
+  /**
+   * Reanimated node which holds position of bottom sheet;s content (in dp).
+   */
+  contentPosition?: Animated.Value<number>
+
+  /**
+   * Defines how violently sheet has to stopped while overdragging. 0 means no overdrag. Defaults to 0.
+   */
+  overdragResistanceFactor: number
+
+  /**
+   * Overrides config for spring animation
+   */
+  springConfig: {
+    damping?: number
+    mass?: number
+    stiffness?: number
+    restSpeedThreshold?: number
+    restDisplacementThreshold?: number
+    toss?: number
+  }
+
+  /**
+   * Refs for gesture handlers used for building bottomsheet
+   */
+  innerGestureHandlerRefs: [
+    React.RefObject<PanGestureHandler>,
+    React.RefObject<PanGestureHandler>,
+    React.RefObject<TapGestureHandler>
+  ]
+
+  enabledImperativeSnapping?: boolean
+}
+
+type State = {
+  snapPoints: Animated.Value<number>[]
+  init: any
+  initSnap: number
+  propsToNewIndices: { [key: string]: number }
+  heightOfContent: Animated.Value<number>
+  heightOfHeader: number
+  heightOfHeaderAnimated: Animated.Value<number>
+}
+
 const { height: screenHeight } = Dimensions.get('window')
 
-const P = (android, ios) => (Platform.OS === 'ios' ? ios : android)
+const P = <T extends any>(android: T, ios: T): T =>
+  Platform.OS === 'ios' ? ios : android
 
 const magic = {
   damping: 50,
@@ -66,7 +154,12 @@ const {
   lessThan,
 } = Animated
 
-function runDecay(clock, value, velocity, wasStartedFromBegin) {
+function runDecay(
+  clock: Animated.Clock,
+  value: Animated.Node<number>,
+  velocity: Animated.Node<number>,
+  wasStartedFromBegin: Animated.Value<number>
+) {
   const state = {
     finished: new Value(0),
     velocity: new Value(0),
@@ -93,12 +186,15 @@ function runDecay(clock, value, velocity, wasStartedFromBegin) {
   ]
 }
 
-function withPreservingAdditiveOffset(drag, state) {
+function withPreservingAdditiveOffset(
+  drag: Animated.Node<number>,
+  state: Animated.Node<number>
+) {
   const prev = new Value(0)
   const valWithPreservedOffset = new Value(0)
   return block([
     cond(
-      eq(state, State.BEGAN),
+      eq(state, GestureState.BEGAN),
       [set(prev, 0)],
       [
         set(
@@ -112,14 +208,20 @@ function withPreservingAdditiveOffset(drag, state) {
   ])
 }
 
-function withDecaying(drag, state, decayClock, velocity, prevent) {
+function withDecaying(
+  drag: Animated.Node<number>,
+  state: Animated.Node<number>,
+  decayClock: Animated.Clock,
+  velocity: Animated.Node<number>,
+  prevent: Animated.Value<number>
+) {
   const valDecayed = new Value(0)
   const offset = new Value(0)
   // since there might be moar than one clock
   const wasStartedFromBegin = new Value(0)
   return block([
     cond(
-      eq(state, State.END),
+      eq(state, GestureState.END),
       [
         cond(
           prevent,
@@ -137,10 +239,10 @@ function withDecaying(drag, state, decayClock, velocity, prevent) {
       ],
       [
         stopClock(decayClock),
-        cond(eq(state, State.BEGAN, set(prevent, 0))),
-        cond(eq(state, State.BEGAN), [
+        cond(eq(state, GestureState.BEGAN), set(prevent, 0)),
+        cond(eq(state, GestureState.BEGAN), [
           set(wasStartedFromBegin, 0),
-          set(offset, add(sub(valDecayed, drag))),
+          set(offset, sub(valDecayed, drag)),
         ]),
         set(valDecayed, add(drag, offset)),
       ]
@@ -149,7 +251,7 @@ function withDecaying(drag, state, decayClock, velocity, prevent) {
   ])
 }
 
-export default class BottomSheetBehavior extends Component {
+export default class BottomSheetBehavior extends React.Component<Props, State> {
   static defaultProps = {
     overdragResistanceFactor: 0,
     initialSnap: 0,
@@ -164,41 +266,51 @@ export default class BottomSheetBehavior extends Component {
     ],
   }
 
-  decayClock = new Clock()
-  panState = new Value(0)
-  tapState = new Value(0)
-  velocity = new Value(0)
-  panMasterState = new Value(State.END)
-  masterVelocity = new Value(0)
-  isManuallySetValue = new Value(0)
-  manuallySetValue = new Value(0)
-  masterClockForOverscroll = new Clock()
-  preventDecaying = new Value(0)
-  dragMasterY = new Value(0)
-  dragY = new Value(0)
+  private decayClock = new Clock()
+  private panState = new Value(0)
+  private tapState = new Value(0)
+  private velocity = new Value(0)
+  private panMasterState = new Value(GestureState.END)
+  private masterVelocity = new Value(0)
+  private isManuallySetValue: Animated.Value<number> = new Value(0)
+  private manuallySetValue = new Value(0)
+  private masterClockForOverscroll = new Clock()
+  private preventDecaying: Animated.Value<number> = new Value(0)
+  private dragMasterY = new Value(0)
+  private dragY = new Value(0)
+  private translateMaster: Animated.Node<number>
+  private panRef: React.RefObject<PanGestureHandler>
+  private master: React.RefObject<PanGestureHandler>
+  private tapRef: React.RefObject<TapGestureHandler>
+  private snapPoint: Animated.Node<number>
+  private Y: Animated.Node<number>
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props)
+
     this.panRef = props.innerGestureHandlerRefs[0]
     this.master = props.innerGestureHandlerRefs[1]
     this.tapRef = props.innerGestureHandlerRefs[2]
-    this.state = BottomSheetBehavior.getDerivedStateFromProps(props)
+    this.state = BottomSheetBehavior.getDerivedStateFromProps(props, undefined)
+
     const { snapPoints, init } = this.state
-    const middlesOfSnapPoints = []
+    const middlesOfSnapPoints: Animated.Node<number>[] = []
     for (let i = 1; i < snapPoints.length; i++) {
       middlesOfSnapPoints.push(divide(add(snapPoints[i - 1], snapPoints[i]), 2))
     }
     const masterOffseted = new Value(init)
     // destination point is a approximation of movement if finger released
-    const tossForMaster = props.springConfig.hasOwnProperty('toss')
-      ? props.springConfig.toss
-      : toss
+    const tossForMaster =
+      props.springConfig.hasOwnProperty('toss') &&
+      props.springConfig.toss != undefined
+        ? props.springConfig.toss
+        : toss
     const destinationPoint = add(
       masterOffseted,
       multiply(tossForMaster, this.masterVelocity)
     )
     // method for generating condition for finding the nearest snap point
-    const currentSnapPoint = (i = 0) =>
+    const currentSnapPoint = (i = 0): Animated.Node<number> =>
       i + 1 === snapPoints.length
         ? snapPoints[i]
         : cond(
@@ -211,10 +323,10 @@ export default class BottomSheetBehavior extends Component {
 
     const masterClock = new Clock()
     const prevMasterDrag = new Value(0)
-    const wasRun = new Value(0)
+    const wasRun: Animated.Value<number> = new Value(0)
     this.translateMaster = block([
       cond(
-        eq(this.panMasterState, State.END),
+        eq(this.panMasterState, GestureState.END),
         [
           set(prevMasterDrag, 0),
           cond(
@@ -250,7 +362,7 @@ export default class BottomSheetBehavior extends Component {
           set(prevMasterDrag, this.dragMasterY),
           set(wasRun, 0), // not sure about this move for cond-began
           cond(
-            eq(this.panMasterState, State.BEGAN),
+            eq(this.panMasterState, GestureState.BEGAN),
             stopClock(this.masterClockForOverscroll)
           ),
         ]
@@ -283,7 +395,14 @@ export default class BottomSheetBehavior extends Component {
     )
   }
 
-  runSpring(clock, value, velocity, dest, wasRun = 0, isManuallySet = 0) {
+  private runSpring(
+    clock: Animated.Clock,
+    value: Animated.Value<number>,
+    velocity: Animated.Node<number>,
+    dest: Animated.Node<number>,
+    wasRun: Animated.Value<number>,
+    isManuallySet: Animated.Node<number> | number = 0
+  ) {
     const state = {
       finished: new Value(0),
       velocity: new Value(0),
@@ -317,7 +436,7 @@ export default class BottomSheetBehavior extends Component {
     ]
   }
 
-  handleMasterPan = event([
+  private handleMasterPan = event([
     {
       nativeEvent: {
         translationY: this.dragMasterY,
@@ -327,7 +446,7 @@ export default class BottomSheetBehavior extends Component {
     },
   ])
 
-  handlePan = event([
+  private handlePan = event([
     {
       nativeEvent: {
         translationY: this.props.enabledInnerScrolling
@@ -343,9 +462,12 @@ export default class BottomSheetBehavior extends Component {
     },
   ])
 
-  handleTap = event([{ nativeEvent: { state: this.tapState } }])
+  private handleTap = event([{ nativeEvent: { state: this.tapState } }])
 
-  withEnhancedLimits(val, masterOffseted) {
+  private withEnhancedLimits(
+    val: Animated.Node<number>,
+    masterOffseted: Animated.Value<number>
+  ) {
     const wasRunMaster = new Value(0)
     const min = multiply(
       -1,
@@ -359,14 +481,17 @@ export default class BottomSheetBehavior extends Component {
     const wasEndedMasterAfterInner = new Value(1)
     const prevMaster = new Value(1)
     const prevState = new Value(0)
-
     const rev = new Value(0)
+
     return block([
       set(rev, limitedVal),
       cond(
         or(
-          eq(this.panState, State.BEGAN),
-          and(eq(this.panState, State.ACTIVE), eq(prevState, State.END))
+          eq(this.panState, GestureState.BEGAN),
+          and(
+            eq(this.panState, GestureState.ACTIVE),
+            eq(prevState, GestureState.END)
+          )
         ),
         [
           set(prev, val),
@@ -386,33 +511,36 @@ export default class BottomSheetBehavior extends Component {
         or(greaterOrEq(limitedVal, 0), greaterThan(masterOffseted, 0)),
         [
           cond(
-            eq(this.panState, State.ACTIVE),
+            eq(this.panState, GestureState.ACTIVE),
             set(masterOffseted, sub(masterOffseted, diffPres))
           ),
           cond(greaterThan(masterOffseted, 0), [set(limitedVal, 0)]),
-          cond(not(eq(this.panState, State.END)), set(justEndedIfEnded, 1)),
+          cond(
+            not(eq(this.panState, GestureState.END)),
+            set(justEndedIfEnded, 1)
+          ),
           cond(
             or(
-              eq(this.panState, State.ACTIVE),
-              eq(this.panMasterState, State.ACTIVE)
+              eq(this.panState, GestureState.ACTIVE),
+              eq(this.panMasterState, GestureState.ACTIVE)
             ),
             set(wasEndedMasterAfterInner, 0)
           ),
           cond(
             and(
-              eq(prevMaster, State.ACTIVE),
-              eq(this.panMasterState, State.END),
-              eq(this.panState, State.END)
+              eq(prevMaster, GestureState.ACTIVE),
+              eq(this.panMasterState, GestureState.END),
+              eq(this.panState, GestureState.END)
             ),
             set(wasEndedMasterAfterInner, 1)
           ),
           set(prevMaster, this.panMasterState),
           cond(
             and(
-              eq(this.panState, State.END),
+              eq(this.panState, GestureState.END),
               not(wasEndedMasterAfterInner),
-              not(eq(this.panMasterState, State.ACTIVE)),
-              not(eq(this.panMasterState, State.BEGAN)),
+              not(eq(this.panMasterState, GestureState.ACTIVE)),
+              not(eq(this.panMasterState, GestureState.BEGAN)),
               or(clockRunning(this.masterClockForOverscroll), not(wasRunMaster))
             ),
             [
@@ -435,7 +563,7 @@ export default class BottomSheetBehavior extends Component {
             ]
           ),
           //   cond(eq(this.panState, State.END), set(wasEndedMasterAfterInner, 0)),
-          cond(eq(this.panState, State.END), set(justEndedIfEnded, 0)),
+          cond(eq(this.panState, GestureState.END), set(justEndedIfEnded, 0)),
           set(this.preventDecaying, 1),
           0,
         ],
@@ -444,53 +572,72 @@ export default class BottomSheetBehavior extends Component {
     ])
   }
 
-  snapTo = index => {
+  snapTo = (index: number) => {
     if (!this.props.enabledImperativeSnapping) {
       return
     }
     this.manuallySetValue.setValue(
-      this.state.snapPoints[this.state.propsToNewIncides[index]]
+      // @ts-ignore
+      this.state.snapPoints[this.state.propsToNewIndices[index]]
     )
     this.isManuallySetValue.setValue(1)
   }
 
-  height = new Value(0)
+  private height: Animated.Value<number> = new Value(0)
 
-  handleLayoutHeader = ({
+  private handleLayoutHeader = ({
     nativeEvent: {
       layout: { height: heightOfHeader },
     },
-  }) => {
+  }: LayoutChangeEvent) => {
     this.state.heightOfHeaderAnimated.setValue(heightOfHeader)
     this.setState({ heightOfHeader })
   }
 
-  handleFullHeader = ({
+  private handleFullHeader = ({
     nativeEvent: {
       layout: { height },
     },
-  }) => this.height.setValue(height)
+  }: LayoutChangeEvent) => this.height.setValue(height)
 
-  handleLayoutContent = ({
+  private handleLayoutContent = ({
     nativeEvent: {
       layout: { height },
     },
-  }) => this.state.heightOfContent.setValue(height - this.state.initSnap)
+  }: LayoutChangeEvent) =>
+    this.state.heightOfContent.setValue(height - this.state.initSnap)
 
-  static renumber = str => (Number(str.split('%')[0]) * screenHeight) / 100
-  static getDerivedStateFromProps(props, state) {
+  static renumber = (str: string) =>
+    (Number(str.split('%')[0]) * screenHeight) / 100
+
+  static getDerivedStateFromProps(
+    props: Props,
+    state: State | undefined
+  ): State {
     let snapPoints
-    const sortedPropsSnapPints = props.snapPoints
-      .map((s, i) => {
-        if (typeof s === 'number') {
-          return { val: s, ind: i }
-        } else if (typeof s === 'string') {
-          return { val: BottomSheetBehavior.renumber(s), ind: i }
-        } else {
-          // exception
+    const sortedPropsSnapPints: Array<{
+      val: number
+      ind: number
+    }> = props.snapPoints
+      .map(
+        (
+          s: number | string,
+          i: number
+        ): {
+          val: number
+          ind: number
+        } => {
+          if (typeof s === 'number') {
+            return { val: s, ind: i }
+          } else if (typeof s === 'string') {
+            return { val: BottomSheetBehavior.renumber(s), ind: i }
+          }
+
+          throw new Error(`Invalid type for value ${s}: ${typeof s}`)
         }
-      })
-      .sort(({ val: a }, { val: b }) => a < b)
+      )
+      .sort(({ val: a }, { val: b }) => (a < b ? 1 : 0))
+
     if (state && state.snapPoints) {
       state.snapPoints.forEach((s, i) =>
         s.setValue(sortedPropsSnapPints[0].val - sortedPropsSnapPints[i].val)
@@ -502,16 +649,16 @@ export default class BottomSheetBehavior extends Component {
       )
     }
 
-    const propsToNewIncides = {}
-    sortedPropsSnapPints.forEach(({ ind }, i) => (propsToNewIncides[ind] = i))
+    const propsToNewIndices: { [key: string]: number } = {}
+    sortedPropsSnapPints.forEach(({ ind }, i) => (propsToNewIndices[ind] = i))
 
     const { initialSnap } = props
 
     return {
       init:
         sortedPropsSnapPints[0].val -
-        sortedPropsSnapPints[propsToNewIncides[initialSnap]].val,
-      propsToNewIncides,
+        sortedPropsSnapPints[propsToNewIndices[initialSnap]].val,
+      propsToNewIndices,
       heightOfHeaderAnimated:
         (state && state.heightOfHeaderAnimated) || new Value(0),
       heightOfContent: (state && state.heightOfContent) || new Value(0),
@@ -543,7 +690,7 @@ export default class BottomSheetBehavior extends Component {
                 translateY: this.translateMaster,
               },
               {
-                translateY: sub(this.height, this.state.initSnap),
+                translateY: sub(this.height, this.state.initSnap) as any,
               },
             ],
           }}
@@ -588,7 +735,7 @@ export default class BottomSheetBehavior extends Component {
                   <Animated.View
                     style={{
                       width: '100%',
-                      transform: [{ translateY: this.Y }],
+                      transform: [{ translateY: this.Y as any }],
                     }}
                     onLayout={this.handleLayoutContent}
                   >
@@ -600,7 +747,10 @@ export default class BottomSheetBehavior extends Component {
             <Animated.Code
               exec={onChange(
                 this.tapState,
-                cond(eq(this.tapState, State.BEGAN), stopClock(this.decayClock))
+                cond(
+                  eq(this.tapState, GestureState.BEGAN),
+                  stopClock(this.decayClock)
+                )
               )}
             />
             {this.props.callbackNode && (
