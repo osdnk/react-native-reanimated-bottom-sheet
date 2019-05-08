@@ -12,7 +12,7 @@ type Props = {
    * Points for snapping of bottom sheet component. They define distance from bottom of the screen.
    * Might be number or percent (as string e.g. '20%') for points or percents of screen height from bottom.
    */
-  snapPoints: number[]
+  snapPoints: (number | string)[]
 
   /**
    * Determines initial snap point of bottom sheet. Defaults to 0.
