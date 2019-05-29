@@ -35,7 +35,7 @@ import BottomSheet from 'reanimated-bottom-sheet'
 class Example extends React.Component {
   renderInner = () => (
     /* render */
-  );
+  )
 
   renderHeader = () => (
     /* render */
