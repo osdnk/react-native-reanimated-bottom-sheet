@@ -240,8 +240,11 @@ function withDecaying(
       [
         stopClock(decayClock),
         cond(eq(state, GestureState.BEGAN), set(prevent, 0)),
+        cond(
+          or(eq(state, GestureState.BEGAN), eq(state, GestureState.ACTIVE)),
+          set(wasStartedFromBegin, 0)
+        ),
         cond(eq(state, GestureState.BEGAN), [
-          set(wasStartedFromBegin, 0),
           set(offset, sub(valDecayed, drag)),
         ]),
         set(valDecayed, add(drag, offset)),
@@ -636,8 +639,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
           throw new Error(`Invalid type for value ${s}: ${typeof s}`)
         }
       )
-      .sort(({ val: a }, { val: b }) => (a < b ? 1 : 0))
-
+      .sort(({ val: a }, { val: b }) => b - a)
     if (state && state.snapPoints) {
       state.snapPoints.forEach((s, i) =>
         s.setValue(sortedPropsSnapPints[0].val - sortedPropsSnapPints[i].val)
