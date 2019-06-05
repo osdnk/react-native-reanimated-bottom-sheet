@@ -90,6 +90,7 @@ Here `this.bottomSheetRef` refers [to the `ref`](https://reactjs.org/docs/react-
 More complex examples can be found in the `Example` folder. To view the examples in the [Expo app](https://expo.io/), open a Terminal and run:
 
 ```sh
+yarn
 cd Example
 yarn
 expo start
