@@ -112,7 +112,7 @@ const magic = {
   restDisplacementThreshold: 0.3,
   deceleration: 0.999,
   bouncyFactor: 1,
-  velocityFactor: P(1, 1.2),
+  velocityFactor: P(1, 0.8),
   toss: 0.4,
   coefForTranslatingVelocities: 5,
 }
