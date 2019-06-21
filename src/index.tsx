@@ -55,6 +55,11 @@ type Props = {
   contentPosition?: Animated.Value<number>
 
   /**
+   * Reanimated node which holds position of bottom sheet's header (in dp).
+   */
+  headerPosition?: Animated.Value<number>
+
+  /**
    * Defines how violently sheet has to stopped while overdragging. 0 means no overdrag. Defaults to 0.
    */
   overdragResistanceFactor: number
@@ -774,6 +779,14 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
                 exec={onChange(
                   this.Y,
                   set(this.props.contentPosition, sub(0, this.Y))
+                )}
+              />
+            )}
+            {this.props.headerPosition && (
+              <Animated.Code
+                exec={onChange(
+                  this.translateMaster,
+                  set(this.props.headerPosition, this.translateMaster)
                 )}
               />
             )}

@@ -67,6 +67,7 @@ class Example extends React.Component {
 | enabledInnerScrolling     | no       | `true`  | Defines whether it's possible to scroll inner content of bottom sheet. |
 | callbackNode              | no       |         | `reanimated` node which holds position of bottom sheet, where `0` it the highest snap point and `1` is the lowest. |
 | contentPosition           | no       |         | `reanimated` node which holds position of bottom sheet's content (in dp) |
+| headerPosition           | no       |         | `reanimated` node which holds position of bottom sheet's header (in dp) |
 | overdragResistanceFactor  | no       |   0     | `Defines how violently sheet has to stopped while overdragging. 0 means no overdrag |
 | springConfig              | no       | `{ }`   | Overrides config for spring animation |
 | innerGestureHandlerRefs   | no       |         | Refs for gesture handlers used for building bottom sheet. The array consists fo three refs. The first for PanGH used for inner content scrolling. The second for PanGH used for header. The third for TapGH used for stopping scrolling the content.   |
