@@ -65,6 +65,11 @@ type Props = {
   overdragResistanceFactor: number
 
   /**
+   * Array of Refs passed to gesture handlers for simultaneous event handling
+   */
+  simultaneousHandlers: Array<React.RefObject<any>> | React.RefObject<any>
+
+  /**
    * Overrides config for spring animation
    */
   springConfig: {
@@ -708,6 +713,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
             waitFor={this.panRef}
             onGestureEvent={this.handleMasterPan}
             onHandlerStateChange={this.handleMasterPan}
+            simultaneousHandlers={this.props.simultaneousHandlers}
           >
             <Animated.View
               style={{
@@ -732,12 +738,14 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
               ref={this.panRef}
               onGestureEvent={this.handlePan}
               onHandlerStateChange={this.handlePan}
+              simultaneousHandlers={this.props.simultaneousHandlers}
             >
               <Animated.View>
                 <TapGestureHandler
                   ref={this.tapRef}
                   enabled={this.props.enabledGestureInteraction}
                   onHandlerStateChange={this.handleTap}
+                  simultaneousHandlers={this.props.simultaneousHandlers}
                 >
                   <Animated.View
                     style={{
