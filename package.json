@@ -1,6 +1,6 @@
 {
   "name": "reanimated-bottom-sheet",
-  "version": "1.0.0-alpha.11",
+  "version": "1.0.0-alpha.12",
   "description": "Bottom sheet component",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
