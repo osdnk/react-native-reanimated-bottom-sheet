@@ -67,7 +67,7 @@ type Props = {
   /**
    * Array of Refs passed to gesture handlers for simultaneous event handling
    */
-  simultaneousHandlers: Array<React.RefObject<any>> | React.RefObject<any>
+  simultaneousHandlers?: Array<React.RefObject<any>> | React.RefObject<any>
 
   /**
    * Overrides config for spring animation
