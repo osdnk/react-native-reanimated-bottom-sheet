@@ -11,26 +11,106 @@ import {
 import { BlurView } from 'expo'
 import { Ionicons } from '@expo/vector-icons'
 import BottomSheet from 'reanimated-bottom-sheet'
+import Animated from 'react-native-reanimated'
+import { ImageStyle } from 'react-native'
+
+const AnimatedView = Animated.View
+const AnimatedBlurView = Animated.createAnimatedComponent(BlurView)
 
 const headerHeight = 70
 const contentHeight = Dimensions.get('window').height - 100
-const songCoverSizes = [50, 200]
+
+const songCoverSizes = [50, Dimensions.get('window').width - 60]
+const songCoverTopPositions = [
+  10,
+  Dimensions.get('window').width / 2 - songCoverSizes[1] / 2,
+]
+const songCoverLeftPositions = [
+  20,
+  Dimensions.get('window').width / 2 - songCoverSizes[1] / 2,
+]
 
 const AppleMusic = () => {
+  let fall = new Animated.Value(1)
+
   const renderContent = () => {
+    const animatedContentOpacity = Animated.interpolate(fall, {
+      inputRange: [0.85, 1],
+      outputRange: [1, 0],
+      extrapolate: Animated.Extrapolate.CLAMP,
+    })
     /**
      * @TODO Implement this.
      */
-    return <View style={styles.contentContainer} />
+    return (
+      <AnimatedView
+        style={[styles.contentContainer, { opacity: animatedContentOpacity }]}
+      >
+        {renderHandler()}
+      </AnimatedView>
+    )
+  }
+
+  const renderSongCover = () => {
+    const animatedSongCoverSize = Animated.interpolate(fall, {
+      inputRange: [0, 1],
+      outputRange: songCoverSizes.slice().reverse(),
+      extrapolate: Animated.Extrapolate.CLAMP,
+    })
+
+    const animatedSongCoverTopPosition = Animated.interpolate(fall, {
+      inputRange: [0, 1],
+      outputRange: songCoverTopPositions.slice().reverse(),
+      extrapolate: Animated.Extrapolate.CLAMP,
+    })
+
+    const animatedSongCoverLeftPosition = Animated.interpolate(fall, {
+      inputRange: [0, 1],
+      outputRange: songCoverLeftPositions.slice().reverse(),
+      extrapolate: Animated.Extrapolate.CLAMP,
+    })
+
+    return (
+      <AnimatedView
+        key={'song-cover-container'}
+        style={[
+          styles.songCoverContainer,
+          {
+            height: animatedSongCoverSize,
+            width: animatedSongCoverSize,
+            left: animatedSongCoverLeftPosition,
+            top: animatedSongCoverTopPosition,
+          },
+        ]}
+      >
+        <Image
+          key={'song-cover'}
+          style={styles.songCoverImage}
+          source={require('../../assets/avicii-tim.jpg')}
+        />
+      </AnimatedView>
+    )
   }
 
   const renderHeader = () => {
-    return (
-      <BlurView intensity={100} tint={'default'} style={styles.headerContainer}>
-        <Image
-          style={styles.coverImage}
-          source={require('../../assets/avicii-tim.jpg')}
-        />
+    const animatedHeaderOpacity = Animated.interpolate(fall, {
+      inputRange: [0.75, 1],
+      outputRange: [0, 1],
+      extrapolate: Animated.Extrapolate.CLAMP,
+    })
+
+    return [
+      <AnimatedBlurView
+        key={'header-container'}
+        intensity={100}
+        tint={'default'}
+        style={[
+          styles.headerContainer,
+          {
+            opacity: animatedHeaderOpacity,
+          },
+        ]}
+      >
         <Text style={styles.songTitleSmall}>{`Ain't A Thing`}</Text>
         <TouchableOpacity style={styles.headerActionButton}>
           <Ionicons name="ios-play" size={32} />
@@ -38,18 +118,91 @@ const AppleMusic = () => {
         <TouchableOpacity style={styles.headerActionButton}>
           <Ionicons name="ios-fastforward" size={32} />
         </TouchableOpacity>
-      </BlurView>
+      </AnimatedBlurView>,
+      renderSongCover(),
+    ]
+  }
+
+  const renderShadow = () => {
+    const animatedShadowOpacity = Animated.interpolate(fall, {
+      inputRange: [0, 1],
+      outputRange: [0.5, 0],
+    })
+
+    return (
+      <AnimatedView
+        style={[
+          styles.shadowContainer,
+          {
+            opacity: animatedShadowOpacity,
+          },
+        ]}
+      />
     )
   }
+
+  const renderHandler = () => {
+    const animatedBar1Rotation = (outputRange: number[]) =>
+      Animated.interpolate(fall, {
+        inputRange: [0, 1],
+        outputRange: outputRange,
+        extrapolate: Animated.Extrapolate.CLAMP,
+      })
+
+    return (
+      <View style={styles.handlerContainer}>
+        <AnimatedView
+          style={[
+            styles.handlerBar,
+            {
+              left: -7.5,
+              transform: [
+                {
+                  rotate: Animated.concat(
+                    // @ts-ignore
+                    animatedBar1Rotation([0.3, 0]),
+                    'rad'
+                  ),
+                },
+              ],
+            },
+          ]}
+        />
+        <AnimatedView
+          style={[
+            styles.handlerBar,
+            {
+              right: -7.5,
+              transform: [
+                {
+                  rotate: Animated.concat(
+                    // @ts-ignore
+                    animatedBar1Rotation([-0.3, 0]),
+                    'rad'
+                  ),
+                },
+              ],
+            },
+          ]}
+        />
+      </View>
+    )
+  }
+
   return (
     <View style={styles.container}>
       <BottomSheet
         initialSnap={0}
+        callbackNode={fall}
         snapPoints={[headerHeight, contentHeight]}
         renderHeader={renderHeader}
         renderContent={renderContent}
       />
       <Image style={styles.map} source={require('../../assets/map-bg.jpg')} />
+      {renderShadow()}
+      <Animated.Code>
+        {() => Animated.block([Animated.debug('callbackNode', fall)])}
+      </Animated.Code>
     </View>
   )
 }
@@ -65,11 +218,21 @@ const styles = StyleSheet.create({
     width: '100%',
   },
 
+  // Shadow
+  shadowContainer: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: '#000',
+  },
+
   // Content
   contentContainer: {
-    backgroundColor: '#444',
+    backgroundColor: '#fff',
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
     height: contentHeight,
-  },
+    overflow: 'visible',
+    marginTop: -headerHeight,
+  } as ViewStyle,
 
   // Header
   headerContainer: {
@@ -89,6 +252,24 @@ const styles = StyleSheet.create({
     minWidth: 50,
   } as ViewStyle,
 
+  // Handler
+  handlerContainer: {
+    alignSelf: 'center',
+    marginTop: 10,
+    height: 20,
+    width: 20,
+  } as ViewStyle,
+
+  handlerBar: {
+    position: 'absolute',
+    backgroundColor: '#D1D1D6',
+    top: 5,
+    borderRadius: 3,
+    height: 5,
+    width: 20,
+  },
+
+  // Song
   songTitleSmall: {
     flexGrow: 1,
     color: '#333',
@@ -96,16 +277,25 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
 
-  coverImage: {
+  songCoverContainer: {
     position: 'absolute',
     top: 10,
     left: 20,
 
-    width: songCoverSizes[0],
-    height: songCoverSizes[0],
-
-    borderRadius: 4,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 15,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 15.0,
   },
+
+  songCoverImage: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 4,
+  } as ImageStyle,
 })
 
 export default AppleMusic

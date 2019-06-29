@@ -728,7 +728,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
             style={
               this.props.enabledInnerScrolling && {
                 height: this.state.initSnap - this.state.heightOfHeader,
-                overflow: 'hidden',
+                // overflow: 'hidden', @gorhom
               }
             }
           >
