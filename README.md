@@ -5,8 +5,8 @@ Built from scratch with [react-native-gesture-handler](https://github.com/kmagie
 
 Usable with Expo with no extra native dependencies!
 
-![](gifs/1.gif)  |  ![](gifs/2.gif) |  ![](gifs/3.gif)  |
-:---------------:|:----------------:|:-----------------:|
+![](gifs/1.gif)  |  ![](gifs/2.gif) |  ![](gifs/3.gif)  |  ![](gifs/4.gif)  |
+:---------------:|:----------------:|:-----------------:|:-----------------:|
 
 
 ## Installation
