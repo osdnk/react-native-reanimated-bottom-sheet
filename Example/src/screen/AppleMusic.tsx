@@ -12,7 +12,7 @@ import { BlurView } from 'expo'
 import { Ionicons } from '@expo/vector-icons'
 import BottomSheet from 'reanimated-bottom-sheet'
 import Animated from 'react-native-reanimated'
-import { ImageStyle } from 'react-native'
+import { TouchableWithoutFeedback } from 'react-native-gesture-handler'
 
 const AnimatedView = Animated.View
 const AnimatedBlurView = Animated.createAnimatedComponent(BlurView)
@@ -47,6 +47,7 @@ const songs = [...Array(40)].map((_, index) => ({
 }))
 
 const AppleMusic = () => {
+  let bottomSheetRef = React.createRef<BottomSheet>()
   let fall = new Animated.Value(1)
 
   const animatedSongCoverTopPosition = Animated.interpolate(fall, {
@@ -60,6 +61,14 @@ const AppleMusic = () => {
     outputRange: [songCoverSizes[0], songCoverSizes[1]].slice().reverse(),
     extrapolate: Animated.Extrapolate.CLAMP,
   })
+
+  const onFlatListTouchStart = () => {
+    bottomSheetRef.current!.snapTo(0)
+  }
+
+  const onHeaderPress = () => {
+    bottomSheetRef.current!.snapTo(1)
+  }
 
   const renderContent = () => {
     const animatedBackgroundOpacity = Animated.interpolate(fall, {
@@ -150,26 +159,30 @@ const AppleMusic = () => {
     })
 
     return [
-      <AnimatedBlurView
+      <TouchableWithoutFeedback
         key={'header-container'}
-        intensity={100}
-        tint={'default'}
-        style={[
-          styles.headerContainer,
-          {
-            opacity: animatedHeaderOpacity,
-          },
-        ]}
+        onPress={onHeaderPress}
       >
-        <View style={styles.headerTopBorder} />
-        <Text style={styles.songTitleSmall}>{song.name}</Text>
-        <TouchableOpacity style={styles.headerActionButton}>
-          <Ionicons name="ios-play" size={32} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.headerActionButton}>
-          <Ionicons name="ios-fastforward" size={32} />
-        </TouchableOpacity>
-      </AnimatedBlurView>,
+        <AnimatedBlurView
+          intensity={100}
+          tint={'default'}
+          style={[
+            styles.headerContainer,
+            {
+              opacity: animatedHeaderOpacity,
+            },
+          ]}
+        >
+          <View style={styles.headerTopBorder} />
+          <Text style={styles.songTitleSmall}>{song.name}</Text>
+          <TouchableOpacity style={styles.headerActionButton}>
+            <Ionicons name="ios-play" size={32} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.headerActionButton}>
+            <Ionicons name="ios-fastforward" size={32} />
+          </TouchableOpacity>
+        </AnimatedBlurView>
+      </TouchableWithoutFeedback>,
       renderSongCover(),
     ]
   }
@@ -263,6 +276,7 @@ const AppleMusic = () => {
   return (
     <View style={styles.container}>
       <BottomSheet
+        ref={bottomSheetRef}
         initialSnap={0}
         callbackNode={fall}
         snapPoints={snapPoints}
@@ -273,6 +287,7 @@ const AppleMusic = () => {
         data={songs}
         renderItem={renderSongItem}
         keyExtractor={(item, index) => `${item.id}${index}`}
+        onTouchStart={onFlatListTouchStart}
       />
       {renderShadow()}
     </View>
@@ -396,7 +411,7 @@ const styles = StyleSheet.create({
     height: '100%',
     borderRadius: 4,
     backgroundColor: '#333',
-  } as ImageStyle,
+  },
 
   // Seek Bar
   seekBarContainer: {
