@@ -62,6 +62,12 @@ const AppleMusic = () => {
     extrapolate: Animated.Extrapolate.CLAMP,
   })
 
+  const animatedHeaderContentOpacity = Animated.interpolate(fall, {
+    inputRange: [0.75, 1],
+    outputRange: [0, 1],
+    extrapolate: Animated.Extrapolate.CLAMP,
+  })
+
   const onFlatListTouchStart = () => {
     bottomSheetRef.current!.snapTo(0)
   }
@@ -71,12 +77,10 @@ const AppleMusic = () => {
   }
 
   const renderContent = () => {
-    const animatedBackgroundOpacity = Animated.interpolate(fall, {
-      inputRange: [0.85, 1],
-      outputRange: [1, 0],
-      extrapolate: Animated.Extrapolate.CLAMP,
-    })
-
+    const animatedBackgroundOpacity = Animated.sub(
+      1,
+      animatedHeaderContentOpacity
+    )
     const animatedContentOpacity = Animated.interpolate(fall, {
       inputRange: [0, 1],
       outputRange: [1, 0],
@@ -93,12 +97,10 @@ const AppleMusic = () => {
         />
 
         <AnimatedView style={{ opacity: animatedContentOpacity }}>
-          {renderHandler()}
-
           <AnimatedView
             style={{
               height: Animated.add(
-                animatedSongCoverSize,
+                Animated.sub(animatedSongCoverSize, snapPoints[0]),
                 animatedSongCoverTopPosition
               ),
             }}
@@ -152,36 +154,46 @@ const AppleMusic = () => {
   }
 
   const renderHeader = () => {
-    const animatedHeaderOpacity = Animated.interpolate(fall, {
-      inputRange: [0.75, 1],
-      outputRange: [0, 1],
-      extrapolate: Animated.Extrapolate.CLAMP,
-    })
-
+    const animatedBackgroundOpacity = Animated.sub(
+      1,
+      animatedHeaderContentOpacity
+    )
     return [
       <TouchableWithoutFeedback
         key={'header-container'}
         onPress={onHeaderPress}
       >
-        <AnimatedBlurView
-          intensity={100}
-          tint={'default'}
-          style={[
-            styles.headerContainer,
-            {
-              opacity: animatedHeaderOpacity,
-            },
-          ]}
-        >
-          <View style={styles.headerTopBorder} />
-          <Text style={styles.songTitleSmall}>{song.name}</Text>
-          <TouchableOpacity style={styles.headerActionButton}>
-            <Ionicons name="ios-play" size={32} />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.headerActionButton}>
-            <Ionicons name="ios-fastforward" size={32} />
-          </TouchableOpacity>
-        </AnimatedBlurView>
+        <AnimatedView style={styles.headerContainer}>
+          <AnimatedView
+            style={[
+              styles.headerBackground,
+              {
+                opacity: animatedBackgroundOpacity,
+              },
+            ]}
+          >
+            {renderHandler()}
+          </AnimatedView>
+          <AnimatedBlurView
+            intensity={100}
+            tint={'default'}
+            style={[
+              styles.headerContentContainer,
+              {
+                opacity: animatedHeaderContentOpacity,
+              },
+            ]}
+          >
+            <View style={styles.headerTopBorder} />
+            <Text style={styles.songTitleSmall}>{song.name}</Text>
+            <TouchableOpacity style={styles.headerActionButton}>
+              <Ionicons name="ios-play" size={32} />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.headerActionButton}>
+              <Ionicons name="ios-fastforward" size={32} />
+            </TouchableOpacity>
+          </AnimatedBlurView>
+        </AnimatedView>
       </TouchableWithoutFeedback>,
       renderSongCover(),
     ]
@@ -310,23 +322,32 @@ const styles = StyleSheet.create({
   // Content
   contentContainer: {
     alignItems: 'center',
-    height: snapPoints[1],
+    height: snapPoints[1] - snapPoints[0],
     overflow: 'visible',
-    marginTop: -snapPoints[0],
   },
 
   contentBackground: {
     ...StyleSheet.absoluteFillObject,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
     backgroundColor: '#fff',
   },
 
   // Header
   headerContainer: {
+    height: snapPoints[0],
+  },
+
+  headerBackground: {
+    ...StyleSheet.absoluteFillObject,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    overflow: 'hidden',
+    backgroundColor: '#fff',
+  },
+
+  headerContentContainer: {
+    ...StyleSheet.absoluteFillObject,
     flexDirection: 'row',
     alignItems: 'center',
-    height: snapPoints[0],
     paddingVertical: 10,
     paddingRight: 20,
     paddingLeft: 20 + songCoverSizes[0] + 20,
