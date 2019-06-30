@@ -90,7 +90,7 @@ const ExampleApp = createAppContainer(
       ...SCREENS,
     },
     {
-      initialRouteName: 'appleMusic',
+      initialRouteName: 'Main',
     }
   )
 )
