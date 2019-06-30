@@ -13,6 +13,8 @@
     "react-navigation": "^3.4.1"
   },
   "devDependencies": {
+    "@types/expo": "^32.0.0",
+    "@types/expo__vector-icons": "^9.0.1",
     "babel-preset-expo": "^5.0.0",
     "escape-string-regexp": "^2.0.0"
   },

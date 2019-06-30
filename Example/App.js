@@ -8,6 +8,7 @@ import {
 } from 'react-native'
 import { createStackNavigator, createAppContainer } from 'react-navigation'
 
+import AppleMusic from './src/screen/AppleMusic'
 import Map from './Map'
 import BlurToolbar from './BlurToolbar'
 import Imperative from './Imperative'
@@ -16,6 +17,10 @@ import Sections from './Sections'
 import Collapsable from './Collapsable'
 
 const SCREENS = {
+  appleMusic: {
+    screen: AppleMusic,
+    title: 'Apple Music',
+  },
   map: {
     screen: Map,
     title: 'Apple Map',
