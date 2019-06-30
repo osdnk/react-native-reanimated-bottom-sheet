@@ -5,9 +5,7 @@ import {
   Text,
   StyleSheet,
   Dimensions,
-  ViewStyle,
   TouchableOpacity,
-  TextStyle,
   FlatList,
 } from 'react-native'
 import { BlurView } from 'expo'
@@ -19,7 +17,6 @@ import { ImageStyle } from 'react-native'
 const AnimatedView = Animated.View
 const AnimatedBlurView = Animated.createAnimatedComponent(BlurView)
 
-const headerHeight = 70
 const songCoverSizes = [50, Dimensions.get('window').width - 60]
 const songCoverTopPositions = [
   10,
@@ -30,7 +27,7 @@ const songCoverLeftPositions = [
   Dimensions.get('window').width / 2 - songCoverSizes[1] / 2,
 ]
 const snapPoints = [
-  headerHeight,
+  70,
   songCoverSizes[1] + songCoverTopPositions[1] + 15 + 24 + 10 + 30 + 28,
 ]
 
@@ -164,6 +161,7 @@ const AppleMusic = () => {
           },
         ]}
       >
+        <View style={styles.headerTopBorder} />
         <Text style={styles.songTitleSmall}>{song.name}</Text>
         <TouchableOpacity style={styles.headerActionButton}>
           <Ionicons name="ios-play" size={32} />
@@ -243,30 +241,20 @@ const AppleMusic = () => {
     )
   }
 
-  const renderItem = ({ item }: { item: any }) => {
+  const renderSongItem = ({ item }: { item: any }) => {
     return (
-      <View style={{ flexDirection: 'row' }}>
+      <View style={styles.songListItemContainer}>
         <View
-          style={{
-            marginLeft: 20,
-            marginRight: 15,
-            marginVertical: 5,
-            width: songCoverSizes[0],
-            height: songCoverSizes[0],
-            borderRadius: 4,
-            backgroundColor: `${item.cover}`,
-          }}
+          style={[
+            {
+              backgroundColor: `${item.cover}`,
+            },
+            styles.songListItemCover,
+          ]}
         />
-        <View
-          style={{
-            flexGrow: 1,
-            borderBottomColor: '#CAC9CE',
-            borderBottomWidth: 0.5,
-            justifyContent: 'center',
-          }}
-        >
+        <View style={styles.songListItemInfoContainer}>
           <Text>{item.name}</Text>
-          <Text style={{ fontSize: 12, color: '#8E8D92' }}>{item.artist}</Text>
+          <Text style={styles.songListItemSecondaryText}>{item.artist}</Text>
         </View>
       </View>
     )
@@ -283,7 +271,7 @@ const AppleMusic = () => {
       />
       <FlatList
         data={songs}
-        renderItem={renderItem}
+        renderItem={renderSongItem}
         keyExtractor={(item, index) => `${item.id}${index}`}
       />
       {renderShadow()}
@@ -292,14 +280,10 @@ const AppleMusic = () => {
 }
 
 const styles = StyleSheet.create({
+  // Screen
   container: {
     flex: 1,
     backgroundColor: '#fff',
-  },
-
-  map: {
-    height: '100%',
-    width: '100%',
   },
 
   // Shadow
@@ -313,9 +297,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: snapPoints[1],
     overflow: 'visible',
-    marginTop: -headerHeight,
-    zIndex: 99999,
-  } as ViewStyle,
+    marginTop: -snapPoints[0],
+  },
 
   contentBackground: {
     ...StyleSheet.absoluteFillObject,
@@ -328,19 +311,28 @@ const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    height: headerHeight,
-
+    height: snapPoints[0],
     paddingVertical: 10,
     paddingRight: 20,
     paddingLeft: 20 + songCoverSizes[0] + 20,
-  } as ViewStyle,
+  },
+
+  headerTopBorder: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    opacity: 0.5,
+    height: 0.25,
+    backgroundColor: '#9B9B9B',
+  },
 
   headerActionButton: {
     justifyContent: 'center',
     alignItems: 'center',
     minHeight: 50,
     minWidth: 50,
-  } as ViewStyle,
+  },
 
   // Handler
   handlerContainer: {
@@ -349,8 +341,7 @@ const styles = StyleSheet.create({
     top: 10,
     height: 20,
     width: 20,
-    zIndex: 99999,
-  } as ViewStyle,
+  },
 
   handlerBar: {
     position: 'absolute',
@@ -412,7 +403,7 @@ const styles = StyleSheet.create({
     height: 24,
     marginTop: 15,
     width: songCoverSizes[1],
-  } as ViewStyle,
+  },
 
   seekBarThumb: {
     position: 'absolute',
@@ -432,7 +423,7 @@ const styles = StyleSheet.create({
   seekBarTimingContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-  } as ViewStyle,
+  },
 
   seekBarTimingText: {
     marginTop: 5,
@@ -440,7 +431,33 @@ const styles = StyleSheet.create({
     lineHeight: 13,
     fontWeight: '500',
     color: '#8E8E93',
-  } as TextStyle,
+  },
+
+  // Song List Item
+  songListItemContainer: {
+    flexDirection: 'row',
+  },
+
+  songListItemCover: {
+    marginLeft: 20,
+    marginRight: 15,
+    marginVertical: 5,
+    width: songCoverSizes[0],
+    height: songCoverSizes[0],
+    borderRadius: 4,
+  },
+
+  songListItemInfoContainer: {
+    flexGrow: 1,
+    borderBottomColor: '#CAC9CE',
+    borderBottomWidth: 0.5,
+    justifyContent: 'center',
+  },
+
+  songListItemSecondaryText: {
+    fontSize: 12,
+    color: '#8E8D92',
+  },
 })
 
 export default AppleMusic
