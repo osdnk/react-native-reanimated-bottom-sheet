@@ -33,7 +33,8 @@ type Props = {
    * Defines if bottom sheet could be scrollable by gesture. Defaults to true.
    */
   enabledGestureInteraction?: boolean
-
+  enabledHeaderGestureInteraction?: boolean
+  enabledContentGestureInteraction?: boolean
   /**
    * If false blocks snapping using snapTo method. Defaults to true.
    */
@@ -270,6 +271,8 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
     initialSnap: 0,
     enabledImperativeSnapping: true,
     enabledGestureInteraction: true,
+    enabledHeaderGestureInteraction: true,
+    enabledContentGestureInteraction: true,
     enabledInnerScrolling: true,
     springConfig: {},
     innerGestureHandlerRefs: [
@@ -517,7 +520,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
           cond(lessThan(limitedVal, min), set(limitedVal, min)),
         ]
       ),
-      set(prevState, this.panState), //on iOS sometimes BEGAN event does not trigger
+      set(prevState, this.panState), // on iOS sometimes BEGAN event does not trigger
       set(diffPres, sub(prev, val)),
       set(prev, val),
       cond(
@@ -708,7 +711,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
           }}
         >
           <PanGestureHandler
-            enabled={this.props.enabledGestureInteraction}
+            enabled={this.props.enabledGestureInteraction && this.props.enabledHeaderGestureInteraction}
             ref={this.master}
             waitFor={this.panRef}
             onGestureEvent={this.handleMasterPan}
@@ -733,7 +736,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
             }
           >
             <PanGestureHandler
-              enabled={this.props.enabledGestureInteraction}
+              enabled={this.props.enabledGestureInteraction && this.props.enabledContentGestureInteraction}
               waitFor={this.master}
               ref={this.panRef}
               onGestureEvent={this.handlePan}
@@ -743,7 +746,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
               <Animated.View>
                 <TapGestureHandler
                   ref={this.tapRef}
-                  enabled={this.props.enabledGestureInteraction}
+                  enabled={this.props.enabledGestureInteraction && this.props.enabledContentGestureInteraction}
                   onHandlerStateChange={this.handleTap}
                   simultaneousHandlers={this.props.simultaneousHandlers}
                 >
