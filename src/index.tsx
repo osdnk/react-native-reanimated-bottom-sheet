@@ -35,6 +35,12 @@ type Props = {
   enabledGestureInteraction?: boolean
   enabledHeaderGestureInteraction?: boolean
   enabledContentGestureInteraction?: boolean
+
+  /**
+   * Defines if bottom sheet content responds to taps. Defaults to true.
+   */
+  enabledContentTapInteraction?: boolean
+
   /**
    * If false blocks snapping using snapTo method. Defaults to true.
    */
@@ -273,6 +279,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
     enabledGestureInteraction: true,
     enabledHeaderGestureInteraction: true,
     enabledContentGestureInteraction: true,
+    enabledContentTapInteraction: true,
     enabledInnerScrolling: true,
     springConfig: {},
     innerGestureHandlerRefs: [
@@ -746,7 +753,11 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
               <Animated.View>
                 <TapGestureHandler
                   ref={this.tapRef}
-                  enabled={this.props.enabledGestureInteraction && this.props.enabledContentGestureInteraction}
+                  enabled={
+                    this.props.enabledGestureInteraction &&
+                    this.props.enabledContentGestureInteraction &&
+                    this.props.enabledContentTapInteraction
+                  }
                   onHandlerStateChange={this.handleTap}
                   simultaneousHandlers={this.props.simultaneousHandlers}
                 >
