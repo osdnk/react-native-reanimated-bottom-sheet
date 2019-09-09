@@ -72,6 +72,11 @@ class Example extends React.Component {
 | springConfig              | no       | `{ }`   | Overrides config for spring animation |
 | innerGestureHandlerRefs   | no       |         | Refs for gesture handlers used for building bottom sheet. The array consists fo three refs. The first for PanGH used for inner content scrolling. The second for PanGH used for header. The third for TapGH used for stopping scrolling the content.   |
 | simultaneousHandlers | no       |         | Accepts a react ref object or an array of refs to handler components. |
+| onOpenStart | no       |         | Accepts a function to be called when the bottom sheet starts to open. |
+| onOpenEnd | no       |         | Accepts a function to be called when the bottom sheet is almost fully openned. |
+| onCloseStart | no       |         | Accepts a function to be called when the bottom sheet starts to close. |
+| onCloseEnd | no       |         | Accepts a function to be called when the bottom sheet is almost closing. |
+| callbackThreshold | no       |    0.01     | Accepts a float value from 0 to 1 indicating the percentage (of the gesture movement) when the callbacks are gonna be called. |
 
 
 ## Methods
