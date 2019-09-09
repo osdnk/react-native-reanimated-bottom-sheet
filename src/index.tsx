@@ -732,7 +732,10 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
           }}
         >
           <PanGestureHandler
-            enabled={this.props.enabledGestureInteraction && this.props.enabledHeaderGestureInteraction}
+            enabled={
+              this.props.enabledGestureInteraction &&
+              this.props.enabledHeaderGestureInteraction
+            }
             ref={this.master}
             waitFor={this.panRef}
             onGestureEvent={this.handleMasterPan}
@@ -757,7 +760,10 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
             }
           >
             <PanGestureHandler
-              enabled={this.props.enabledGestureInteraction && this.props.enabledContentGestureInteraction}
+              enabled={
+                this.props.enabledGestureInteraction &&
+                this.props.enabledContentGestureInteraction
+              }
               waitFor={this.master}
               ref={this.panRef}
               onGestureEvent={this.handlePan}
@@ -822,7 +828,10 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
                             this.state.snapPoints.length - 1
                           ]
                         ),
-                        1 - this.props.callbackThreshold
+                        1 -
+                          (this.props.callbackThreshold
+                            ? this.props.callbackThreshold
+                            : 0.01)
                       ),
                       neq(this.onOpenStartValue, 1)
                     ),
@@ -853,6 +862,8 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
                           ]
                         ),
                         this.props.callbackThreshold
+                          ? this.props.callbackThreshold
+                          : 0.01
                       ),
                       neq(this.onOpenEndValue, 1)
                     ),
@@ -883,6 +894,8 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
                           ]
                         ),
                         this.props.callbackThreshold
+                          ? this.props.callbackThreshold
+                          : 0.01
                       ),
                       neq(this.onCloseStartValue, 1)
                     ),
@@ -912,7 +925,10 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
                             this.state.snapPoints.length - 1
                           ]
                         ),
-                        1 - this.props.callbackThreshold
+                        1 -
+                          (this.props.callbackThreshold
+                            ? this.props.callbackThreshold
+                            : 0.01)
                       ),
                       neq(this.onCloseEndValue, 1)
                     ),
