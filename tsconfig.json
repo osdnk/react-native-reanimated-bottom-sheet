@@ -22,5 +22,6 @@
     "paths": {
       "reanimated-bottom-sheet": ["./src/index"]
     }
-  }
+  },
+  "include": ["src"]
 }
