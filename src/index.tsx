@@ -42,6 +42,11 @@ type Props = {
   enabledContentTapInteraction?: boolean
 
   /**
+   * When true, clamp bottom position to first snapPoint.
+   */
+  enabledBottomClamp?: boolean
+
+  /**
    * If false blocks snapping using snapTo method. Defaults to true.
    */
   enabledManualSnapping?: boolean
@@ -286,6 +291,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
     initialSnap: 0,
     enabledImperativeSnapping: true,
     enabledGestureInteraction: true,
+    enabledBottomClamp: false,
     enabledHeaderGestureInteraction: true,
     enabledContentGestureInteraction: true,
     enabledContentTapInteraction: true,
@@ -406,7 +412,14 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
       ),
       cond(
         greaterThan(masterOffseted, snapPoints[0]),
-        masterOffseted,
+        cond(
+          and(
+            props.enabledBottomClamp ? 1 : 0,
+            greaterThan(masterOffseted, snapPoints[snapPoints.length - 1])
+          ),
+          snapPoints[snapPoints.length - 1],
+          masterOffseted
+        ),
         max(
           multiply(
             sub(
