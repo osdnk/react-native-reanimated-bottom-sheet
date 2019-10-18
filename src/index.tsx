@@ -317,13 +317,14 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
   private preventDecaying: Animated.Value<number> = new Value(0)
   private dragMasterY = new Value(0)
   private dragY = new Value(0)
-  private clampingY = new Value(0)
   private translateMaster: Animated.Node<number>
   private panRef: React.RefObject<PanGestureHandler>
   private master: React.RefObject<PanGestureHandler>
   private tapRef: React.RefObject<TapGestureHandler>
   private snapPoint: Animated.Node<number>
   private Y: Animated.Node<number>
+  private clampingValue: Animated.Value<number> = new Value(0)
+  private clampingEnabled: Animated.Value<number> = new Value(0)
   private onOpenStartValue: Animated.Value<number> = new Value(0)
   private onOpenEndValue: Animated.Value<number> = new Value(0)
   private onCloseStartValue: Animated.Value<number> = new Value(1)
@@ -364,8 +365,10 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
           )
     // current snap point desired
     this.snapPoint = currentSnapPoint()
+
     if (props.enabledBottomClamp) {
-      this.clampingY.setValue(snapPoints[snapPoints.length - 1]);
+      this.clampingEnabled.setValue(1);
+      this.clampingValue.setValue(snapPoints[snapPoints.length - 1]);
     }
 
     const masterClock = new Clock()
@@ -418,10 +421,10 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
         greaterThan(masterOffseted, snapPoints[0]),
         cond(
           and(
-            props.enabledBottomClamp ? 1 : 0,
-            greaterThan(masterOffseted, this.clampingY)
+            this.clampingEnabled,
+            greaterThan(masterOffseted, this.clampingValue)
           ),
-          this.clampingY,
+          this.clampingValue,
           masterOffseted
         ),
         max(
@@ -449,10 +452,15 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
     )
   }
 
-  componentDidUpdate(_, prevState) {
-    const { snapPoints } = this.state;
-    if (this.props.enabledBottomClamp && snapPoints !== prevState.snapPoints) {
-      this.clampingY.setValue(snapPoints[snapPoints.length - 1]);
+  componentDidUpdate(prevProps: Props, prevState: State) {
+    const { snapPoints } = this.state
+    const { enabledBottomClamp} = this.props;
+
+    if (enabledBottomClamp !== prevProps.enabledBottomClamp) {
+      this.clampingEnabled.setValue(enabledBottomClamp ? 1 : 0)
+    }
+    if (enabledBottomClamp && snapPoints !== prevState.snapPoints) {
+      this.clampingValue.setValue(snapPoints[snapPoints.length - 1])
     }
   }
 
