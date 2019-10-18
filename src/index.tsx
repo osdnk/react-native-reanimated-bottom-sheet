@@ -317,6 +317,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
   private preventDecaying: Animated.Value<number> = new Value(0)
   private dragMasterY = new Value(0)
   private dragY = new Value(0)
+  private clampingY = new Value(0)
   private translateMaster: Animated.Node<number>
   private panRef: React.RefObject<PanGestureHandler>
   private master: React.RefObject<PanGestureHandler>
@@ -363,6 +364,9 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
           )
     // current snap point desired
     this.snapPoint = currentSnapPoint()
+    if (props.enabledBottomClamp) {
+      this.clampingY.setValue(snapPoints[snapPoints.length - 1]);
+    }
 
     const masterClock = new Clock()
     const prevMasterDrag = new Value(0)
@@ -415,9 +419,9 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
         cond(
           and(
             props.enabledBottomClamp ? 1 : 0,
-            greaterThan(masterOffseted, snapPoints[snapPoints.length - 1])
+            greaterThan(masterOffseted, this.clampingY)
           ),
-          snapPoints[snapPoints.length - 1],
+          this.clampingY,
           masterOffseted
         ),
         max(
@@ -443,6 +447,13 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
       ),
       masterOffseted
     )
+  }
+
+  componentDidUpdate(_, prevState) {
+    const { snapPoints } = this.state;
+    if (this.props.enabledBottomClamp && snapPoints !== prevState.snapPoints) {
+      this.clampingY.setValue(snapPoints[snapPoints.length - 1]);
+    }
   }
 
   private runSpring(
