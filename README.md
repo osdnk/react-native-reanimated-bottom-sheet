@@ -65,6 +65,7 @@ class Example extends React.Component {
 | enabledGestureInteraction | no       | `true`  | Defines if bottom sheet could be scrollable by gesture. |
 | enabledHeaderGestureInteraction | no       | `true`  | Defines if bottom sheet header could be scrollable by gesture. |
 | enabledContentGestureInteraction | no       | `true`  | Defines if bottom sheet content could be scrollable by gesture. |
+| enabledContentTapInteraction | no       | `true`  | Defines whether bottom sheet content could be tapped. |
 | enabledManualSnapping     | no       | `true`  | If `false` blocks snapping using `snapTo` method. |
 | enabledInnerScrolling     | no       | `true`  | Defines whether it's possible to scroll inner content of bottom sheet. |
 | callbackNode              | no       |         | `reanimated` node which holds position of bottom sheet, where `0` it the highest snap point and `1` is the lowest. |
