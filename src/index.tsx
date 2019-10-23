@@ -450,7 +450,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
     )
   }
 
-  componentDidUpdate(prevProps: Props, prevState: State) {
+  componentDidUpdate(_prevProps: Props, prevState: State) {
     const { snapPoints } = this.state
     if (this.props.enabledBottomClamp && snapPoints !== prevState.snapPoints) {
       this.clampingValue.setValue(snapPoints[snapPoints.length - 1])
