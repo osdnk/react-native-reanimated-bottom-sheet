@@ -42,6 +42,11 @@ type Props = {
   enabledContentTapInteraction?: boolean
 
   /**
+   * When true, clamp bottom position to first snapPoint.
+   */
+  enabledBottomClamp?: boolean
+
+  /**
    * If false blocks snapping using snapTo method. Defaults to true.
    */
   enabledManualSnapping?: boolean
@@ -286,6 +291,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
     initialSnap: 0,
     enabledImperativeSnapping: true,
     enabledGestureInteraction: true,
+    enabledBottomClamp: false,
     enabledHeaderGestureInteraction: true,
     enabledContentGestureInteraction: true,
     enabledContentTapInteraction: true,
@@ -317,6 +323,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
   private tapRef: React.RefObject<TapGestureHandler>
   private snapPoint: Animated.Node<number>
   private Y: Animated.Node<number>
+  private clampingValue: Animated.Value<number> = new Value(0)
   private onOpenStartValue: Animated.Value<number> = new Value(0)
   private onOpenEndValue: Animated.Value<number> = new Value(0)
   private onCloseStartValue: Animated.Value<number> = new Value(1)
@@ -357,6 +364,10 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
           )
     // current snap point desired
     this.snapPoint = currentSnapPoint()
+
+    if (props.enabledBottomClamp) {
+      this.clampingValue.setValue(snapPoints[snapPoints.length - 1])
+    }
 
     const masterClock = new Clock()
     const prevMasterDrag = new Value(0)
@@ -406,7 +417,14 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
       ),
       cond(
         greaterThan(masterOffseted, snapPoints[0]),
-        masterOffseted,
+        cond(
+          and(
+            props.enabledBottomClamp ? 1 : 0,
+            greaterThan(masterOffseted, this.clampingValue)
+          ),
+          this.clampingValue,
+          masterOffseted
+        ),
         max(
           multiply(
             sub(
@@ -430,6 +448,13 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
       ),
       masterOffseted
     )
+  }
+
+  componentDidUpdate(_prevProps: Props, prevState: State) {
+    const { snapPoints } = this.state
+    if (this.props.enabledBottomClamp && snapPoints !== prevState.snapPoints) {
+      this.clampingValue.setValue(snapPoints[snapPoints.length - 1])
+    }
   }
 
   private runSpring(
