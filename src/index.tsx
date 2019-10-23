@@ -324,7 +324,6 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
   private snapPoint: Animated.Node<number>
   private Y: Animated.Node<number>
   private clampingValue: Animated.Value<number> = new Value(0)
-  private clampingEnabled: Animated.Value<number> = new Value(0)
   private onOpenStartValue: Animated.Value<number> = new Value(0)
   private onOpenEndValue: Animated.Value<number> = new Value(0)
   private onCloseStartValue: Animated.Value<number> = new Value(1)
@@ -367,8 +366,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
     this.snapPoint = currentSnapPoint()
 
     if (props.enabledBottomClamp) {
-      this.clampingEnabled.setValue(1);
-      this.clampingValue.setValue(snapPoints[snapPoints.length - 1]);
+      this.clampingValue.setValue(snapPoints[snapPoints.length - 1])
     }
 
     const masterClock = new Clock()
@@ -421,7 +419,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
         greaterThan(masterOffseted, snapPoints[0]),
         cond(
           and(
-            this.clampingEnabled,
+            props.enabledBottomClamp ? 1 : 0,
             greaterThan(masterOffseted, this.clampingValue)
           ),
           this.clampingValue,
@@ -454,12 +452,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
 
   componentDidUpdate(prevProps: Props, prevState: State) {
     const { snapPoints } = this.state
-    const { enabledBottomClamp} = this.props;
-
-    if (enabledBottomClamp !== prevProps.enabledBottomClamp) {
-      this.clampingEnabled.setValue(enabledBottomClamp ? 1 : 0)
-    }
-    if (enabledBottomClamp && snapPoints !== prevState.snapPoints) {
+    if (this.props.enabledBottomClamp && snapPoints !== prevState.snapPoints) {
       this.clampingValue.setValue(snapPoints[snapPoints.length - 1])
     }
   }
