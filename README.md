@@ -33,7 +33,7 @@ If you don't use Expo, install and link [react-native-gesture-handler](https://k
 import BottomSheet from 'reanimated-bottom-sheet'
 
 class Example extends React.Component {
-  renderInner = () => (
+  renderContent = () => (
     /* render */
   )
 
@@ -46,7 +46,7 @@ class Example extends React.Component {
       <View style={styles.container}>
         <BottomSheet
           snapPoints = {[450, 300, 0]}
-          renderContent = {this.renderInner}
+          renderContent = {this.renderContent}
           renderHeader = {this.renderHeader}
         />
     </View>)
