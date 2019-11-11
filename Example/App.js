@@ -15,6 +15,7 @@ import Imperative from './Imperative'
 import Test from './Test'
 import Sections from './Sections'
 import Collapsable from './Collapsable'
+import List from './List'
 
 const SCREENS = {
   appleMusic: {
@@ -44,6 +45,10 @@ const SCREENS = {
   collapsable: {
     screen: Collapsable,
     title: 'Collapsable Header',
+  },
+  list: {
+    screen: List,
+    title: 'FlatList',
   },
 }
 
