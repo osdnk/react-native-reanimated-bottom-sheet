@@ -3,17 +3,19 @@ import { StyleSheet, Text, Button, View } from 'react-native'
 import { FlatList } from 'react-native-gesture-handler'
 import BottomSheet from 'reanimated-bottom-sheet'
 
+const NUMBER_OF_ROWS = 20
+
 export default class Example extends React.Component {
   renderInner = () => {
     const renderRow = ({ item }) => (
       <View
         style={{ height: 40, backgroundColor: `#${item.title % 10}88424` }}
       >
-        <Text>computed {item.title + 1} </Text>
+        <Text>computed {item.title + 1}/{NUMBER_OF_ROWS} </Text>
       </View>
     )
 
-    const data = [...Array(20)].map((e, i) => ({ title: i, key: `${i}` }))
+    const data = [...Array(NUMBER_OF_ROWS)].map((e, i) => ({ title: i, key: `${i}` }))
     return <FlatList style={styles.list} data={data} renderItem={renderRow} />
   }
 
@@ -24,7 +26,7 @@ export default class Example extends React.Component {
       <View style={styles.container}>
         <BottomSheet
           ref={this.bs}
-          snapPoints={[150, 300, '50%', 450]}
+          snapPoints={[350, 300, 250, 100]}
           renderContent={this.renderInner}
           initialSnap={0}
           enabledInnerScrolling={true}
