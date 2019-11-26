@@ -663,7 +663,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
     nativeEvent: {
       layout: { height },
     },
-  }: LayoutChangeEvent) => this.height.setValue(height)
+  }: LayoutChangeEvent) => requestAnimationFrame(() => this.height.setValue(height))
 
   private handleLayoutContent = ({
     nativeEvent: {
