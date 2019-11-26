@@ -81,6 +81,7 @@ class Example extends React.Component {
 | onCloseStart | no       |         | Accepts a function to be called when the bottom sheet starts to close. |
 | onCloseEnd | no       |         | Accepts a function to be called when the bottom sheet is almost closing. |
 | callbackThreshold | no       |    0.01     | Accepts a float value from 0 to 1 indicating the percentage (of the gesture movement) when the callbacks are gonna be called. |
+| borderRadius | no       |        | Border radius of content wrapper (excluding header) |
 
 
 ## Methods

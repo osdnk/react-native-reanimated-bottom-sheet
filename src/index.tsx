@@ -109,6 +109,7 @@ type Props = {
   onCloseStart?: () => void
   onCloseEnd?: () => void
   callbackThreshold?: number
+  borderRadius?: number
 }
 
 type State = {
@@ -733,6 +734,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
   }
 
   render() {
+    const { borderRadius } = this.props
     return (
       <React.Fragment>
         <Animated.View
@@ -813,6 +815,8 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
                     style={{
                       width: '100%',
                       transform: [{ translateY: this.Y as any }],
+                      borderTopLeftRadius: borderRadius,
+                      borderTopRightRadius: borderRadius,
                     }}
                     onLayout={this.handleLayoutContent}
                   >
