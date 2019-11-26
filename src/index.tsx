@@ -786,6 +786,8 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
               this.props.enabledInnerScrolling && {
                 height: this.state.initSnap - this.state.heightOfHeader,
                 overflow: 'hidden',
+                borderTopLeftRadius: borderRadius,
+                borderTopRightRadius: borderRadius,
               }
             }
           >
@@ -815,8 +817,6 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
                     style={{
                       width: '100%',
                       transform: [{ translateY: this.Y as any }],
-                      borderTopLeftRadius: borderRadius,
-                      borderTopRightRadius: borderRadius,
                     }}
                     onLayout={this.handleLayoutContent}
                   >
