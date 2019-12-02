@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native'
-import { BlurView } from 'expo'
+import { BlurView } from 'expo-blur'
 import { Ionicons } from '@expo/vector-icons'
 import BottomSheet from 'reanimated-bottom-sheet'
 import Animated from 'react-native-reanimated'

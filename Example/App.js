@@ -6,7 +6,8 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native'
-import { createStackNavigator, createAppContainer } from 'react-navigation'
+import { createAppContainer } from 'react-navigation'
+import { createStackNavigator } from 'react-navigation-stack'
 
 import AppleMusic from './src/screen/AppleMusic'
 import Map from './Map'
