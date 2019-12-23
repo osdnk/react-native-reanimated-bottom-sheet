@@ -47,6 +47,11 @@ type Props = {
   enabledBottomClamp?: boolean
 
   /**
+   * When true, sheet will grows up from bottom to initial snapPoint.
+   */
+  enabledBottomInitialAnimation?: boolean
+
+  /**
    * If false blocks snapping using snapTo method. Defaults to true.
    */
   enabledManualSnapping?: boolean
@@ -293,6 +298,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
     enabledImperativeSnapping: true,
     enabledGestureInteraction: true,
     enabledBottomClamp: false,
+    enabledBottomInitialAnimation: false,
     enabledHeaderGestureInteraction: true,
     enabledContentGestureInteraction: true,
     enabledContentTapInteraction: true,
@@ -719,10 +725,19 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
 
     const { initialSnap } = props
 
+    let init =
+      sortedPropsSnapPoints[0].val -
+      sortedPropsSnapPoints[propsToNewIndices[initialSnap]].val
+
+    if (props.enabledBottomInitialAnimation) {
+      init =
+        sortedPropsSnapPoints[
+          sortedPropsSnapPoints.length - 1 - propsToNewIndices[initialSnap]
+        ].val
+    }
+
     return {
-      init:
-        sortedPropsSnapPoints[0].val -
-        sortedPropsSnapPoints[propsToNewIndices[initialSnap]].val,
+      init,
       propsToNewIndices,
       heightOfHeaderAnimated:
         (state && state.heightOfHeaderAnimated) || new Value(0),
