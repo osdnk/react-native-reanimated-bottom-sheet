@@ -383,7 +383,8 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
       cond(
         or(
           eq(this.panMasterState, GestureState.END),
-          eq(this.panMasterState, GestureState.CANCELLED)
+          eq(this.panMasterState, GestureState.CANCELLED),
+          eq(this.panMasterState, GestureState.FAILED)
         ),
         [
           set(prevMasterDrag, 0),
