@@ -108,6 +108,7 @@ type Props = {
   onOpenEnd?: () => void
   onCloseStart?: () => void
   onCloseEnd?: () => void
+  onGestureEvent?: () => void
   callbackThreshold?: number
   borderRadius?: number
 }
@@ -347,7 +348,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
     // destination point is a approximation of movement if finger released
     const tossForMaster =
       props.springConfig.hasOwnProperty('toss') &&
-      props.springConfig.toss != undefined
+        props.springConfig.toss != undefined
         ? props.springConfig.toss
         : toss
     const destinationPoint = add(
@@ -359,10 +360,10 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
       i + 1 === snapPoints.length
         ? snapPoints[i]
         : cond(
-            lessThan(destinationPoint, middlesOfSnapPoints[i]),
-            snapPoints[i],
-            currentSnapPoint(i + 1)
-          )
+          lessThan(destinationPoint, middlesOfSnapPoints[i]),
+          snapPoints[i],
+          currentSnapPoint(i + 1)
+        )
     // current snap point desired
     this.snapPoint = currentSnapPoint()
 
@@ -514,21 +515,28 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
 
   private handlePan = event([
     {
-      nativeEvent: {
-        translationY: this.props.enabledInnerScrolling
-          ? this.dragY
-          : this.dragMasterY,
-        state: this.props.enabledInnerScrolling
-          ? this.panState
-          : this.panMasterState,
-        velocityY: this.props.enabledInnerScrolling
-          ? this.velocity
-          : this.masterVelocity,
+      nativeEvent: ({ translationY, state, velocityY }: { translationY: any, state: any, velocityY: any }) => block([
+        cond(this.props.enabledInnerScrolling, set(this.dragY, translationY), set(this.dragMasterY, translationY)),
+        cond(this.props.enabledInnerScrolling, set(this.panState, state), set(this.panMasterState, state)),
+        cond(this.props.enabledInnerScrolling, set(this.velocity, velocityY), set(this.masterVelocity, velocityY)),
+        call([this.dragMasterY], () => {
+          if (this.props.onGestureEvent) this.props.onGestureEvent()
+        }),
+        call([this.dragY], () => {
+          if (this.props.onGestureEvent) this.props.onGestureEvent()
+        }),
+      ]),
+    }
+  ])
+
+  private handleTap = event([
+    {
+      nativeEvent:
+      {
+        state: this.tapState
       },
     },
   ])
-
-  private handleTap = event([{ nativeEvent: { state: this.tapState } }])
 
   private withEnhancedLimits(
     val: Animated.Node<number>,
@@ -857,13 +865,13 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
                         divide(
                           this.translateMaster,
                           this.state.snapPoints[
-                            this.state.snapPoints.length - 1
+                          this.state.snapPoints.length - 1
                           ]
                         ),
                         1 -
-                          (this.props.callbackThreshold
-                            ? this.props.callbackThreshold
-                            : 0.01)
+                        (this.props.callbackThreshold
+                          ? this.props.callbackThreshold
+                          : 0.01)
                       ),
                       neq(this.onOpenStartValue, 1)
                     ),
@@ -890,7 +898,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
                         divide(
                           this.translateMaster,
                           this.state.snapPoints[
-                            this.state.snapPoints.length - 1
+                          this.state.snapPoints.length - 1
                           ]
                         ),
                         this.props.callbackThreshold
@@ -922,7 +930,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
                         divide(
                           this.translateMaster,
                           this.state.snapPoints[
-                            this.state.snapPoints.length - 1
+                          this.state.snapPoints.length - 1
                           ]
                         ),
                         this.props.callbackThreshold
@@ -954,13 +962,13 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
                         divide(
                           this.translateMaster,
                           this.state.snapPoints[
-                            this.state.snapPoints.length - 1
+                          this.state.snapPoints.length - 1
                           ]
                         ),
                         1 -
-                          (this.props.callbackThreshold
-                            ? this.props.callbackThreshold
-                            : 0.01)
+                        (this.props.callbackThreshold
+                          ? this.props.callbackThreshold
+                          : 0.01)
                       ),
                       neq(this.onCloseEndValue, 1)
                     ),
