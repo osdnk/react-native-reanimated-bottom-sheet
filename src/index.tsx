@@ -516,9 +516,9 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
   private handlePan = event([
     {
       nativeEvent: ({ translationY, state, velocityY }: { translationY: any, state: any, velocityY: any }) => block([
-        cond(this.props.enabledInnerScrolling, set(this.dragY, translationY), set(this.dragMasterY, translationY)),
-        cond(this.props.enabledInnerScrolling, set(this.panState, state), set(this.panMasterState, state)),
-        cond(this.props.enabledInnerScrolling, set(this.velocity, velocityY), set(this.masterVelocity, velocityY)),
+        cond(defined(this.props.enabledInnerScrolling), set(this.dragY, translationY), set(this.dragMasterY, translationY)),
+        cond(defined(this.props.enabledInnerScrolling), set(this.panState, state), set(this.panMasterState, state)),
+        cond(defined(this.props.enabledInnerScrolling), set(this.velocity, velocityY), set(this.masterVelocity, velocityY)),
         call([this.dragMasterY], () => {
           if (this.props.onGestureEvent) this.props.onGestureEvent()
         }),
