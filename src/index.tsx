@@ -704,8 +704,13 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
       )
       .sort(({ val: a }, { val: b }) => b - a)
     if (state && state.snapPoints) {
-      state.snapPoints.forEach((s, i) =>
-        s.setValue(sortedPropsSnapPoints[0].val - sortedPropsSnapPoints[i].val)
+      state.snapPoints.forEach(
+        (s, i) =>
+          // @ts-ignore
+          s.__initialized &&
+          s.setValue(
+            sortedPropsSnapPoints[0].val - sortedPropsSnapPoints[i].val
+          )
       )
       snapPoints = state.snapPoints
     } else {
