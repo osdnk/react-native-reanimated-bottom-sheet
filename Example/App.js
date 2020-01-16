@@ -9,7 +9,6 @@ import {
 import { createAppContainer } from 'react-navigation'
 import { createStackNavigator } from 'react-navigation-stack'
 
-import AppleMusic from './src/screen/AppleMusic'
 import Map from './Map'
 import BlurToolbar from './BlurToolbar'
 import Imperative from './Imperative'
@@ -18,17 +17,9 @@ import Sections from './Sections'
 import Collapsable from './Collapsable'
 
 const SCREENS = {
-  appleMusic: {
-    screen: AppleMusic,
-    title: 'Apple Music',
-  },
   map: {
     screen: Map,
     title: 'Apple Map',
-  },
-  toolbar: {
-    screen: BlurToolbar,
-    title: 'Blur Toolbar',
   },
   imperative: {
     screen: Imperative,
@@ -84,7 +75,7 @@ class MainScreenItem extends React.Component {
   }
 }
 
-const ExampleApp = createAppContainer(
+const ExampleApp = (
   createStackNavigator(
     {
       Main: { screen: MainScreen },
