@@ -2,9 +2,9 @@
   "name": "reanimated-bottom-sheet",
   "version": "1.0.0-alpha.18",
   "description": "Bottom sheet component",
-  "main": "lib/commonjs/index.js",
-  "module": "lib/module/index.js",
-  "react-native": "lib/module/index.js",
+  "main": "src/index.tsx",
+  "module": "src/index.tsx",
+  "react-native": "src/index.tsx",
   "types": "lib/typescript/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
