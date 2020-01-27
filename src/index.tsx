@@ -341,7 +341,8 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
     const { snapPoints, init } = this.state
     const middlesOfSnapPoints: Animated.Node<number>[] = []
     for (let i = 1; i < snapPoints.length; i++) {
-      middlesOfSnapPoints.push(divide(add(snapPoints[i - 1], snapPoints[i]), 2))
+      const tuple = [add(snapPoints[i - 1], 10), snapPoints[i]]
+      middlesOfSnapPoints.push(tuple)
     }
     const masterOffseted = new Value(init)
     // destination point is a approximation of movement if finger released
@@ -354,14 +355,35 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
       masterOffseted,
       multiply(tossForMaster, this.masterVelocity)
     )
+
+    const positive = greaterThan(
+      multiply(tossForMaster, this.masterVelocity),
+      0
+    )
     // method for generating condition for finding the nearest snap point
     const currentSnapPoint = (i = 0): Animated.Node<number> =>
       i + 1 === snapPoints.length
         ? snapPoints[i]
         : cond(
-            lessThan(destinationPoint, middlesOfSnapPoints[i]),
-            snapPoints[i],
-            currentSnapPoint(i + 1)
+            positive,
+            cond(
+              greaterThan(destinationPoint, middlesOfSnapPoints[i][0]),
+              cond(
+                lessThan(destinationPoint, middlesOfSnapPoints[i][1]),
+                snapPoints[i + 1],
+                currentSnapPoint(i + 1)
+              ),
+              snapPoints[i]
+            ),
+            cond(
+              greaterThan(destinationPoint, middlesOfSnapPoints[i][1]),
+              cond(
+                lessThan(destinationPoint, middlesOfSnapPoints[i][0]),
+                snapPoints[i + 1],
+                currentSnapPoint(i + 1)
+              ),
+              snapPoints[i]
+            )
           )
     // current snap point desired
     this.snapPoint = currentSnapPoint()
@@ -664,7 +686,8 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
     nativeEvent: {
       layout: { height },
     },
-  }: LayoutChangeEvent) => requestAnimationFrame(() => this.height.setValue(height))
+  }: LayoutChangeEvent) =>
+    requestAnimationFrame(() => this.height.setValue(height))
 
   private handleLayoutContent = ({
     nativeEvent: {
@@ -685,23 +708,18 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
       val: number
       ind: number
     }> = props.snapPoints
-      .map(
-        (
-          s: number | string,
-          i: number
-        ): {
-          val: number
-          ind: number
-        } => {
-          if (typeof s === 'number') {
-            return { val: s, ind: i }
-          } else if (typeof s === 'string') {
-            return { val: BottomSheetBehavior.renumber(s), ind: i }
-          }
-
-          throw new Error(`Invalid type for value ${s}: ${typeof s}`)
+      .map((s: number | string, i: number): {
+        val: number
+        ind: number
+      } => {
+        if (typeof s === 'number') {
+          return { val: s, ind: i }
+        } else if (typeof s === 'string') {
+          return { val: BottomSheetBehavior.renumber(s), ind: i }
         }
-      )
+
+        throw new Error(`Invalid type for value ${s}: ${typeof s}`)
+      })
       .sort(({ val: a }, { val: b }) => b - a)
     if (state && state.snapPoints) {
       state.snapPoints.forEach(
