@@ -339,9 +339,15 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
     this.state = BottomSheetBehavior.getDerivedStateFromProps(props, undefined)
 
     const { snapPoints, init } = this.state
-    const middlesOfSnapPoints: Animated.Node<number>[] = []
+    const middlesOfSnapPoints: [
+      Animated.Node<number>,
+      Animated.Node<number>
+    ][] = []
     for (let i = 1; i < snapPoints.length; i++) {
-      const tuple = [add(snapPoints[i - 1], 10), snapPoints[i]]
+      const tuple: [Animated.Node<number>, Animated.Node<number>] = [
+        add(snapPoints[i - 1], 10),
+        snapPoints[i],
+      ]
       middlesOfSnapPoints.push(tuple)
     }
     const masterOffseted = new Value(init)
@@ -708,18 +714,23 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
       val: number
       ind: number
     }> = props.snapPoints
-      .map((s: number | string, i: number): {
-        val: number
-        ind: number
-      } => {
-        if (typeof s === 'number') {
-          return { val: s, ind: i }
-        } else if (typeof s === 'string') {
-          return { val: BottomSheetBehavior.renumber(s), ind: i }
-        }
+      .map(
+        (
+          s: number | string,
+          i: number
+        ): {
+          val: number
+          ind: number
+        } => {
+          if (typeof s === 'number') {
+            return { val: s, ind: i }
+          } else if (typeof s === 'string') {
+            return { val: BottomSheetBehavior.renumber(s), ind: i }
+          }
 
-        throw new Error(`Invalid type for value ${s}: ${typeof s}`)
-      })
+          throw new Error(`Invalid type for value ${s}: ${typeof s}`)
+        }
+      )
       .sort(({ val: a }, { val: b }) => b - a)
     if (state && state.snapPoints) {
       state.snapPoints.forEach(
