@@ -310,7 +310,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
   private panState = new Value(0)
   private tapState = new Value(0)
   private velocity = new Value(0)
-  private panMasterState = new Value(GestureState.END)
+  private panMasterState: Animated.Value<number> = new Value(GestureState.END)
   private masterVelocity = new Value(0)
   private isManuallySetValue: Animated.Value<number> = new Value(0)
   private manuallySetValue = new Value(0)
