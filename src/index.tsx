@@ -343,6 +343,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
       Animated.Node<number>,
       Animated.Node<number>
     ][] = []
+
     for (let i = 1; i < snapPoints.length; i++) {
       const tuple: [Animated.Node<number>, Animated.Node<number>] = [
         add(snapPoints[i - 1], 10),
@@ -350,6 +351,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
       ]
       middlesOfSnapPoints.push(tuple)
     }
+
     const masterOffseted = new Value(init)
     // destination point is a approximation of movement if finger released
     const tossForMaster =
@@ -362,7 +364,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
       multiply(tossForMaster, this.masterVelocity)
     )
 
-    const positive = greaterThan(
+    const positive = greaterOrEq(
       multiply(tossForMaster, this.masterVelocity),
       0
     )
