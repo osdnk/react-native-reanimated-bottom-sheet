@@ -7,6 +7,11 @@
     "commitMessage": "chore: release %s",
     "tagName": "v%s"
   },
+  "plugins": {
+    "@release-it/conventional-changelog": {
+      "preset": "angular"
+    }
+  },
   "npm": {
     "publish": true
   },
