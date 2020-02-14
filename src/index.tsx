@@ -404,7 +404,8 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
                     this.snapPoint
                   ),
                   wasRun,
-                  this.isManuallySetValue
+                  this.isManuallySetValue,
+                  this.masterVelocity
                 )
               ),
               set(this.isManuallySetValue, 0),
@@ -474,7 +475,8 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
     velocity: Animated.Node<number>,
     dest: Animated.Node<number>,
     wasRun: Animated.Value<number>,
-    isManuallySet: Animated.Node<number> | number = 0
+    isManuallySet: Animated.Node<number> | number,
+    valueToBeZeroed: Animated.Value<number>
   ) {
     const state = {
       finished: new Value(0),
@@ -504,7 +506,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
         cond(defined(wasRun), set(wasRun, 1)),
       ]),
       spring(clock, state, config),
-      cond(state.finished, stopClock(clock)),
+      cond(state.finished, [stopClock(clock), set(valueToBeZeroed, 0)]),
       state.position,
     ]
   }
@@ -629,7 +631,9 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
                   masterOffseted,
                   diff(val),
                   this.snapPoint,
-                  wasRunMaster
+                  wasRunMaster,
+                  0,
+                  this.masterVelocity
                 )
               ),
               set(this.masterVelocity, 0),
