@@ -1,12 +1,13 @@
 # Reanimated Bottom Sheet
+
 Highly configurable component imitating [native bottom sheet behavior](https://material.io/design/components/sheets-bottom.html#standard-bottom-sheet), with fully native 60 FPS animations!
 
 Built from scratch with [react-native-gesture-handler](https://github.com/kmagiera/react-native-gesture-handler) and [react-native-reanimated](https://github.com/kmagiera/react-native-reanimated).
 
 Usable with Expo with no extra native dependencies!
 
-![](gifs/1.gif)  |  ![](gifs/2.gif) |  ![](gifs/3.gif)  |  ![](gifs/4.gif)  |
-:---------------:|:----------------:|:-----------------:|:-----------------:|
+| ![](gifs/1.gif) | ![](gifs/2.gif) | ![](gifs/3.gif) | ![](gifs/4.gif) |
+| :-------------: | :-------------: | :-------------: | :-------------: |
 
 
 ## Installation
@@ -25,7 +26,7 @@ npm install reanimated-bottom-sheet
 
 If you are using Expo, you are done.
 
-If you don't use Expo, install and link [react-native-gesture-handler](https://kmagiera.github.io/react-native-gesture-handler/docs/getting-started.html) and [react-native-reanimated](https://github.com/kmagiera/react-native-reanimated).
+If you don't use Expo, install and link [react-native-gesture-handler](https://kmagiera.github.io/react-native-gesture-handler/docs/getting-started.html) and [react-native-reanimated](https://github.com/kmagiera/react-native-reanimated). Remember to follow [gesture hander guide](https://software-mansion.github.io/react-native-gesture-handler/docs/getting-started.html) while setting it up for the first time.
 
 ## Usage
 
@@ -56,34 +57,33 @@ class Example extends React.Component {
 
 ## Props
 
-| name                      | required | default | description |
-| ------------------------- | -------- | ------- | ------------|
-| snapPoints                | yes      |         | E.g. `[300, 200, 0]`. Points for snapping of bottom sheet coomponent. They define distance from bottom of the screen. Might be number or percent (as string e.g. `'20%'`) for points or percents of screen height from bottom. Note: Array values must be in descending order. |
-| initialSnap               | no       |    0    | Determines initial snap point of bottom sheet. The value is the index from snapPoints. |
-| renderContent             | no       |         | Method for rendering scrollable content of bottom sheet. |
-| renderHeader              | no       |         | Method for rendering non-scrollable header of bottom sheet. |
-| enabledGestureInteraction | no       | `true`  | Defines if bottom sheet could be scrollable by gesture. |
-| enabledHeaderGestureInteraction | no       | `true`  | Defines if bottom sheet header could be scrollable by gesture. |
-| enabledContentGestureInteraction | no       | `true`  | Defines if bottom sheet content could be scrollable by gesture. |
-| enabledContentTapInteraction | no       | `true`  | Defines whether bottom sheet content could be tapped. |
-| enabledManualSnapping     | no       | `true`  | If `false` blocks snapping using `snapTo` method. |
-| enabledBottomClamp        | no       | `false` | If `true` block movement is clamped from bottom to minimal snapPoint. |
-| enabledBottomInitialAnimation        | no       | `false` | If `true` sheet will grows up from bottom to initial snapPoint. |
-| enabledInnerScrolling     | no       | `true`  | Defines whether it's possible to scroll inner content of bottom sheet. |
-| callbackNode              | no       |         | `reanimated` node which holds position of bottom sheet, where `0` it the highest snap point and `1` is the lowest. |
-| contentPosition           | no       |         | `reanimated` node which holds position of bottom sheet's content (in dp) |
-| headerPosition           | no       |         | `reanimated` node which holds position of bottom sheet's header (in dp) |
-| overdragResistanceFactor  | no       |   0     | `Defines how violently sheet has to stopped while overdragging. 0 means no overdrag |
-| springConfig              | no       | `{ }`   | Overrides config for spring animation |
-| innerGestureHandlerRefs   | no       |         | Refs for gesture handlers used for building bottom sheet. The array consists fo three refs. The first for PanGH used for inner content scrolling. The second for PanGH used for header. The third for TapGH used for stopping scrolling the content.   |
-| simultaneousHandlers | no       |         | Accepts a react ref object or an array of refs to handler components. |
-| onOpenStart | no       |         | Accepts a function to be called when the bottom sheet starts to open. |
-| onOpenEnd | no       |         | Accepts a function to be called when the bottom sheet is almost fully openned. |
-| onCloseStart | no       |         | Accepts a function to be called when the bottom sheet starts to close. |
-| onCloseEnd | no       |         | Accepts a function to be called when the bottom sheet is almost closing. |
-| callbackThreshold | no       |    0.01     | Accepts a float value from 0 to 1 indicating the percentage (of the gesture movement) when the callbacks are gonna be called. |
-| borderRadius | no       |        | Border radius of content wrapper (excluding header) |
-
+| name                             | required | default | description                                                                                                                                                                                                                                                                    |
+| -------------------------------- | -------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| snapPoints                       | yes      |         | E.g. `[300, 200, 0]`. Points for snapping of bottom sheet coomponent. They define distance from bottom of the screen. Might be number or percent (as string e.g. `'20%'`) for points or percents of screen height from bottom. Note: Array values must be in descending order. |
+| initialSnap                      | no       | 0       | Determines initial snap point of bottom sheet. The value is the index from snapPoints.                                                                                                                                                                                         |
+| renderContent                    | no       |         | Method for rendering scrollable content of bottom sheet.                                                                                                                                                                                                                       |
+| renderHeader                     | no       |         | Method for rendering non-scrollable header of bottom sheet.                                                                                                                                                                                                                    |
+| enabledGestureInteraction        | no       | `true`  | Defines if bottom sheet could be scrollable by gesture.                                                                                                                                                                                                                        |
+| enabledHeaderGestureInteraction  | no       | `true`  | Defines if bottom sheet header could be scrollable by gesture.                                                                                                                                                                                                                 |
+| enabledContentGestureInteraction | no       | `true`  | Defines if bottom sheet content could be scrollable by gesture.                                                                                                                                                                                                                |
+| enabledContentTapInteraction     | no       | `true`  | Defines whether bottom sheet content could be tapped.                                                                                                                                                                                                                          |
+| enabledManualSnapping            | no       | `true`  | If `false` blocks snapping using `snapTo` method.                                                                                                                                                                                                                              |
+| enabledBottomClamp               | no       | `false` | If `true` block movement is clamped from bottom to minimal snapPoint.                                                                                                                                                                                                          |
+| enabledBottomInitialAnimation    | no       | `false` | If `true` sheet will grows up from bottom to initial snapPoint.                                                                                                                                                                                                                |
+| enabledInnerScrolling            | no       | `true`  | Defines whether it's possible to scroll inner content of bottom sheet.                                                                                                                                                                                                         |
+| callbackNode                     | no       |         | `reanimated` node which holds position of bottom sheet, where `0` it the highest snap point and `1` is the lowest.                                                                                                                                                             |
+| contentPosition                  | no       |         | `reanimated` node which holds position of bottom sheet's content (in dp)                                                                                                                                                                                                       |
+| headerPosition                   | no       |         | `reanimated` node which holds position of bottom sheet's header (in dp)                                                                                                                                                                                                        |
+| overdragResistanceFactor         | no       | 0       | `Defines how violently sheet has to stopped while overdragging. 0 means no overdrag                                                                                                                                                                                            |
+| springConfig                     | no       | `{ }`   | Overrides config for spring animation                                                                                                                                                                                                                                          |
+| innerGestureHandlerRefs          | no       |         | Refs for gesture handlers used for building bottom sheet. The array consists fo three refs. The first for PanGH used for inner content scrolling. The second for PanGH used for header. The third for TapGH used for stopping scrolling the content.                           |
+| simultaneousHandlers             | no       |         | Accepts a react ref object or an array of refs to handler components.                                                                                                                                                                                                          |
+| onOpenStart                      | no       |         | Accepts a function to be called when the bottom sheet starts to open.                                                                                                                                                                                                          |
+| onOpenEnd                        | no       |         | Accepts a function to be called when the bottom sheet is almost fully openned.                                                                                                                                                                                                 |
+| onCloseStart                     | no       |         | Accepts a function to be called when the bottom sheet starts to close.                                                                                                                                                                                                         |
+| onCloseEnd                       | no       |         | Accepts a function to be called when the bottom sheet is almost closing.                                                                                                                                                                                                       |
+| callbackThreshold                | no       | 0.01    | Accepts a float value from 0 to 1 indicating the percentage (of the gesture movement) when the callbacks are gonna be called.                                                                                                                                                  |
+| borderRadius                     | no       |         | Border radius of content wrapper (excluding header)                                                                                                                                                                                                                            |
 
 ## Methods
 
