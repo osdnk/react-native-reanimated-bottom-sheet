@@ -345,10 +345,19 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
     this.state = BottomSheetBehavior.getDerivedStateFromProps(props, undefined)
 
     const { snapPoints, init } = this.state
-    const middlesOfSnapPoints: Animated.Node<number>[] = []
+    const middlesOfSnapPoints: [
+      Animated.Node<number>,
+      Animated.Node<number>
+    ][] = []
+
     for (let i = 1; i < snapPoints.length; i++) {
-      middlesOfSnapPoints.push(divide(add(snapPoints[i - 1], snapPoints[i]), 2))
+      const tuple: [Animated.Node<number>, Animated.Node<number>] = [
+        add(snapPoints[i - 1], 10),
+        sub(snapPoints[i], 25),
+      ]
+      middlesOfSnapPoints.push(tuple)
     }
+
     const masterOffseted = new Value(init)
     // destination point is a approximation of movement if finger released
     const tossForMaster =
@@ -360,14 +369,35 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
       masterOffseted,
       multiply(tossForMaster, this.masterVelocity)
     )
+
+    const positive = greaterOrEq(
+      multiply(tossForMaster, this.masterVelocity),
+      0
+    )
     // method for generating condition for finding the nearest snap point
     const currentSnapPoint = (i = 0): Animated.Node<number> =>
       i + 1 === snapPoints.length
         ? snapPoints[i]
         : cond(
-            lessThan(destinationPoint, middlesOfSnapPoints[i]),
-            snapPoints[i],
-            currentSnapPoint(i + 1)
+            positive,
+            cond(
+              greaterThan(destinationPoint, middlesOfSnapPoints[i][0]),
+              cond(
+                lessThan(destinationPoint, middlesOfSnapPoints[i][1]),
+                snapPoints[i + 1],
+                currentSnapPoint(i + 1)
+              ),
+              snapPoints[i]
+            ),
+            cond(
+              greaterThan(destinationPoint, middlesOfSnapPoints[i][1]),
+              cond(
+                lessThan(destinationPoint, middlesOfSnapPoints[i][0]),
+                snapPoints[i + 1],
+                currentSnapPoint(i + 1)
+              ),
+              snapPoints[i]
+            )
           )
     // current snap point desired
     this.snapPoint = currentSnapPoint()
