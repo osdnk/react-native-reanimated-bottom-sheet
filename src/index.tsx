@@ -347,7 +347,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
     for (let i = 1; i < snapPoints.length; i++) {
       const tuple: [Animated.Node<number>, Animated.Node<number>] = [
         add(snapPoints[i - 1], 10),
-        snapPoints[i],
+        sub(snapPoints[i], 25),
       ]
       middlesOfSnapPoints.push(tuple)
     }
