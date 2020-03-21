@@ -331,6 +331,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
   private tapRef: React.RefObject<TapGestureHandler>
   private snapPoint: Animated.Node<number>
   private Y: Animated.Node<number>
+  private scrollY: Animated.Node<number> = new Value(0)
   private clampingValue: Animated.Value<number> = new Value(0)
   private onOpenStartValue: Animated.Value<number> = new Value(0)
   private onOpenEndValue: Animated.Value<number> = new Value(0)
@@ -797,6 +798,15 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
 
   render() {
     const { borderRadius } = this.props
+
+    const maxDistanceThatCanBeScrolled = -138
+    const maxDistanceToMoveScroll = 400 + this.state.heightOfHeader
+
+    this.scrollY = Animated.interpolate(this.Y, {
+      inputRange: [maxDistanceThatCanBeScrolled, 0],
+      outputRange: [maxDistanceToMoveScroll, 0],
+    })
+
     return (
       <React.Fragment>
         <Animated.View
