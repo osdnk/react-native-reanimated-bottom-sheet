@@ -122,7 +122,8 @@ type State = {
   init: any
   initSnap: number
   propsToNewIndices: { [key: string]: number }
-  heightOfContent: Animated.Value<number>
+  heightOfContent: number
+  heightOfContentAnimated: Animated.Value<number>
   heightOfHeader: number
   heightOfHeaderAnimated: Animated.Value<number>
 }
@@ -576,7 +577,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
     const wasRunMaster = new Value(0)
     const min = multiply(
       -1,
-      add(this.state.heightOfContent, this.state.heightOfHeaderAnimated)
+      add(this.state.heightOfContentAnimated, this.state.heightOfHeaderAnimated)
     )
     const prev = new Value(0)
     const limitedVal = new Value(0)
@@ -712,8 +713,11 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
     nativeEvent: {
       layout: { height },
     },
-  }: LayoutChangeEvent) =>
-    this.state.heightOfContent.setValue(height - this.state.initSnap)
+  }: LayoutChangeEvent) => {
+    const heightOfContent = height - this.state.initSnap
+    this.state.heightOfContentAnimated.setValue(heightOfContent)
+    this.setState({ heightOfContent: height })
+  }
 
   static renumber = (str: string) =>
     (Number(str.split('%')[0]) * screenHeight) / 100
@@ -782,10 +786,12 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
       propsToNewIndices,
       heightOfHeaderAnimated:
         (state && state.heightOfHeaderAnimated) || new Value(0),
-      heightOfContent: (state && state.heightOfContent) || new Value(0),
+      heightOfContentAnimated:
+        (state && state.heightOfContentAnimated) || new Value(0),
       initSnap: sortedPropsSnapPoints[0].val,
       snapPoints,
       heightOfHeader: (state && state.heightOfHeader) || 0,
+      heightOfContent: (state && state.heightOfContent) || 0,
     }
   }
 
