@@ -895,6 +895,18 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
                     {this.props.renderContent && this.props.renderContent()}
                   </Animated.View>
                 </TapGestureHandler>
+                <Animated.View
+                  style={{
+                    width: 5,
+                    height: 30,
+                    backgroundColor: 'darkgrey',
+                    position: 'absolute',
+                    right: 0,
+                    top: this.scrollY,
+                    borderRadius: 5,
+                    zIndex: 9999,
+                  }}
+                />
               </Animated.View>
             </PanGestureHandler>
             <Animated.Code
