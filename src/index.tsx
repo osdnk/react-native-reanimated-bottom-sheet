@@ -683,11 +683,12 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
     if (!this.props.enabledImperativeSnapping) {
       return
     }
+
+    this.isManuallySetValue.setValue(1)
     this.manuallySetValue.setValue(
       // @ts-ignore
       this.state.snapPoints[this.state.propsToNewIndices[index]]
     )
-    this.isManuallySetValue.setValue(1)
   }
 
   private height: Animated.Value<number> = new Value(0)
