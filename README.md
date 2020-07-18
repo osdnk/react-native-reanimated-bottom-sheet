@@ -17,40 +17,70 @@ Open a Terminal in the project root and run:
 yarn add reanimated-bottom-sheet
 ```
 
-or if you use `npm`:
+Now we need to install [`react-native-gesture-handler`](https://github.com/kmagiera/react-native-gesture-handler) and [`react-native-reanimated`](https://github.com/kmagiera/react-native-reanimated).
+
+If you are using Expo, to ensure that you get the compatible versions of the libraries, run:
 
 ```sh
-npm install reanimated-bottom-sheet
+expo install react-native-gesture-handler react-native-reanimated
 ```
 
-If you are using Expo, you are done.
+If you are not using Expo, run the following:
 
-If you don't use Expo, install and link [react-native-gesture-handler](https://kmagiera.github.io/react-native-gesture-handler/docs/getting-started.html) and [react-native-reanimated](https://github.com/kmagiera/react-native-reanimated).
+```sh
+yarn add react-native-reanimated react-native-gesture-handler
+```
+
+If you are using Expo, you are done. Otherwise, continue to the next steps.
+
+We're done! Now you can build and run the app on your device/simulator.
 
 ## Usage
 
 ```javascript
-import BottomSheet from 'reanimated-bottom-sheet'
+import * as React from 'react';
+import { StyleSheet, Text, View, Button } from 'react-native';
+import Animated from 'react-native-reanimated';
+import BottomSheet from 'reanimated-bottom-sheet';
 
-class Example extends React.Component {
-  renderContent = () => (
-    /* render */
-  )
+export default function App() {
+  const renderContent = () => (
+    <View
+      style={{
+        backgroundColor: 'white',
+        padding: 16,
+        height: 450,
+      }}
+    >
+      <Text>Swipe down to close</Text>
+    </View>
+  );
 
-  renderHeader = () => (
-    /* render */
-  )
+  const sheetRef = React.useRef(null);
 
-  render() {
-    return (
-      <View style={styles.container}>
-        <BottomSheet
-          snapPoints = {[450, 300, 0]}
-          renderContent = {this.renderContent}
-          renderHeader = {this.renderHeader}
+  return (
+    <>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: 'papayawhip',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Button
+          title="Open Bottom Sheet"
+          onPress={() => sheetRef.current.snapTo(0)}
         />
-    </View>)
-  }
+      </View>
+      <BottomSheet
+        ref={sheetRef}
+        snapPoints={[450, 300, 0]}
+        borderRadius={10}
+        renderContent={renderContent}
+      />
+    </>
+  );
 }
 ```
 
