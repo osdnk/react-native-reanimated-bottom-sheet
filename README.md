@@ -17,6 +17,12 @@ Open a Terminal in the project root and run:
 yarn add reanimated-bottom-sheet
 ```
 
+Or if you use npm:
+
+```sh
+npm install reanimated-bottom-sheet
+```
+
 Now we need to install [`react-native-gesture-handler`](https://github.com/kmagiera/react-native-gesture-handler) and [`react-native-reanimated`](https://github.com/kmagiera/react-native-reanimated).
 
 If you are using Expo, to ensure that you get the compatible versions of the libraries, run:
@@ -31,7 +37,11 @@ If you are not using Expo, run the following:
 yarn add react-native-reanimated react-native-gesture-handler
 ```
 
-If you are using Expo, you are done. Otherwise, continue to the next steps.
+Or if you use npm:
+
+```sh
+npm install react-native-reanimated react-native-gesture-handler
+```
 
 We're done! Now you can build and run the app on your device/simulator.
 
