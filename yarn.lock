@@ -1059,6 +1059,13 @@
   dependencies:
     find-up "^2.1.0"
 
+"@egjs/hammerjs@^2.0.17":
+  version "2.0.17"
+  resolved "https://registry.yarnpkg.com/@egjs/hammerjs/-/hammerjs-2.0.17.tgz#5dc02af75a6a06e4c2db0202cae38c9263895124"
+  integrity sha512-XQsZgjm2EcVUiZQf11UBJQfmZeEmOW8DpI1gsFeln6w0ae0ii4dMQEQ0kjl6DspdWX1aGY1/loyXnP0JS06e/A==
+  dependencies:
+    "@types/hammerjs" "^2.0.36"
+
 "@iarna/toml@2.2.3":
   version "2.2.3"
   resolved "https://registry.yarnpkg.com/@iarna/toml/-/toml-2.2.3.tgz#f060bf6eaafae4d56a7dac618980838b0696e2ab"
@@ -1209,6 +1216,11 @@
     "@types/events" "*"
     "@types/minimatch" "*"
     "@types/node" "*"
+
+"@types/hammerjs@^2.0.36":
+  version "2.0.36"
+  resolved "https://registry.yarnpkg.com/@types/hammerjs/-/hammerjs-2.0.36.tgz#17ce0a235e9ffbcdcdf5095646b374c2bf615a4c"
+  integrity sha512-7TUK/k2/QGpEAv/BCwSHlYu3NXZhQ9ZwBYpzr9tjlPIL2C5BeGhH3DmVavRx3ZNyELX5TLC91JTz/cen6AAtIQ==
 
 "@types/minimatch@*":
   version "3.0.3"
@@ -4388,7 +4400,7 @@ progress@^2.0.0:
   resolved "https://registry.yarnpkg.com/progress/-/progress-2.0.3.tgz#7e8cf8d8f5b8f239c1bc68beb4eb78567d572ef8"
   integrity sha512-7PiHtLll5LdnKIMw100I+8xJXR5gW2QwWYkT6iJva0bXitZKa/XMrSbdmg3r2Xnaidz9Qumd0VPaMrZlF9V9sA==
 
-prop-types@^15.5.10, prop-types@^15.6.2:
+prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.7.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.7.2.tgz#52c41e75b8c87e72b9d9360e0206b99dcbffa6c5"
   integrity sha512-8QQikdH7//R2vurIJSutZ1smHYTcLpRWEOlHnzcWHmBYrOGUysKwSsrC89BCiFj3CbrfJ/nXFdJepOVrY1GCHQ==
@@ -4445,14 +4457,15 @@ react-is@^16.8.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.8.4.tgz#90f336a68c3a29a096a3d648ab80e87ec61482a2"
   integrity sha512-PVadd+WaUDOAciICm/J1waJaSvgq+4rHE/K70j0PFqKhkTBsPv/82UGQJNXAngz1fOQLLxI6z1sEDmJDQhCTAA==
 
-react-native-gesture-handler@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.1.0.tgz#2a7d545ad2e0ca23adce22b2af441ad360ecccee"
-  integrity sha512-E9IKHpmL+sz/iCYkUriTUjBaQBORWV+oheYPQleADkxjo2sYsQfnlyTz4EQYFONkUwJ6WmfTNkYt2/yc5U4Ziw==
+react-native-gesture-handler@^1.6.1:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.6.1.tgz#678e2dce250ed66e93af409759be22cd6375dd17"
+  integrity sha512-gQgIKhDiYf754yzhhliagLuLupvGb6ZyBdzYzr7aus3Fyi87TLOw63ers+r4kGw0h26oAWTAdHd34JnF4NeL6Q==
   dependencies:
+    "@egjs/hammerjs" "^2.0.17"
     hoist-non-react-statics "^2.3.1"
-    invariant "^2.2.2"
-    prop-types "^15.5.10"
+    invariant "^2.2.4"
+    prop-types "^15.7.2"
 
 react-native-reanimated@^1.0.1:
   version "1.7.0"
