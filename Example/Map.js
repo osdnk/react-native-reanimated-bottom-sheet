@@ -5,12 +5,20 @@ import {
   Text,
   TouchableWithoutFeedback,
   View,
+  TextInput,
 } from 'react-native'
 import BottomSheet from 'reanimated-bottom-sheet'
 
 export default class Example extends React.Component {
   renderInner = () => (
     <View style={styles.panel}>
+      <TextInput
+        style={styles.search}
+        onFocus={() => {
+          this.bs.current.snapTo(1)
+        }}
+        placeholder="search"
+      />
       <Text style={styles.panelTitle}>San Francisco Airport</Text>
       <Text style={styles.panelSubtitle}>
         International Airport - 40 miles away
@@ -59,6 +67,13 @@ export default class Example extends React.Component {
 const IMAGE_SIZE = 200
 
 const styles = StyleSheet.create({
+  search: {
+    borderColor: 'gray',
+    borderWidth: StyleSheet.hairlineWidth,
+    height: 40,
+    borderRadius: 10,
+    paddingHorizontal: 15,
+  },
   container: {
     flex: 1,
     backgroundColor: '#F5FCFF',
