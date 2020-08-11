@@ -704,6 +704,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
       layout: { height: heightOfHeader },
     },
   }: LayoutChangeEvent) => {
+    console.log('handleLayoutHeader: ', heightOfHeader)
     this.state.heightOfHeaderAnimated.setValue(heightOfHeader)
     this.setState({ heightOfHeader })
   }
@@ -713,13 +714,17 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
       layout: { height },
     },
   }: LayoutChangeEvent) =>
-    requestAnimationFrame(() => this.height.setValue(height))
+    requestAnimationFrame(() => {
+      console.log('handleFullHeader: ', heightOfHeader)
+      this.height.setValue(height)
+    })
 
   private handleLayoutContent = ({
     nativeEvent: {
       layout: { height },
     },
   }: LayoutChangeEvent) => {
+    console.log('handleLayoutContent')
     this.state.heightOfContent.setValue(height - this.state.initSnap)
 
     if (this.props.onSnapChange) {
@@ -738,6 +743,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
     props: Props,
     state: State | undefined
   ): State {
+    console.log('getDerivedStateFromProps')
     let snapPoints
     const sortedPropsSnapPoints: Array<{
       val: number
@@ -801,6 +807,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
   }
 
   render() {
+    console.log('render')
     const { borderRadius } = this.props
     return (
       <React.Fragment>
