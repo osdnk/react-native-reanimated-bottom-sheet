@@ -87,6 +87,11 @@ type Props = {
   simultaneousHandlers?: Array<React.RefObject<any>> | React.RefObject<any>
 
   /**
+   * Event fired when state changes.
+   */
+  onSnapChange?: Function
+
+  /**
    * Overrides config for spring animation
    */
   springConfig: {
@@ -310,6 +315,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
       React.createRef(),
     ],
     callbackThreshold: 0.01,
+    onSnapChange: null,
   }
 
   private decayClock = new Clock()
@@ -728,23 +734,18 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
       val: number
       ind: number
     }> = props.snapPoints
-      .map(
-        (
-          s: number | string,
-          i: number
-        ): {
-          val: number
-          ind: number
-        } => {
-          if (typeof s === 'number') {
-            return { val: s, ind: i }
-          } else if (typeof s === 'string') {
-            return { val: BottomSheetBehavior.renumber(s), ind: i }
-          }
-
-          throw new Error(`Invalid type for value ${s}: ${typeof s}`)
+      .map((s: number | string, i: number): {
+        val: number
+        ind: number
+      } => {
+        if (typeof s === 'number') {
+          return { val: s, ind: i }
+        } else if (typeof s === 'string') {
+          return { val: BottomSheetBehavior.renumber(s), ind: i }
         }
-      )
+
+        throw new Error(`Invalid type for value ${s}: ${typeof s}`)
+      })
       .sort(({ val: a }, { val: b }) => b - a)
     if (state && state.snapPoints) {
       state.snapPoints.forEach(
@@ -778,7 +779,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
         ].val
     }
 
-    return {
+    const result = {
       init,
       propsToNewIndices,
       heightOfHeaderAnimated:
@@ -788,6 +789,16 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
       snapPoints,
       heightOfHeader: (state && state.heightOfHeader) || 0,
     }
+
+    if (props.onSnapChange) {
+      try {
+        props.onSnapChange(result)
+      } catch (e) {
+        console.error('props.onSnapChange error: ', e)
+      }
+    }
+
+    return result
   }
 
   render() {
