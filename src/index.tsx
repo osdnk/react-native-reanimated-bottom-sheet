@@ -885,13 +885,11 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
                     this.props.enabledContentTapInteraction
                   }
                   onHandlerStateChange={ev => {
-                    if (this.handleTap) {
-                      console.log('onhandlerstatechange, ev : ', ev.nativeEvent)
-                      if (this.props.onSnapChange) {
-                        this.props.onSnapChange(ev.nativeEvent)
-                      }
-                      this.handleTap(ev)
+                    console.log('onhandlerstatechange, ev : ', ev.nativeEvent)
+                    if (this.props.onSnapChange) {
+                      this.props.onSnapChange(ev.nativeEvent)
                     }
+                    return this.handleTap(ev)
                   }}
                   simultaneousHandlers={this.props.simultaneousHandlers}
                 >
