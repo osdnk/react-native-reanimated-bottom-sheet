@@ -573,7 +573,15 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
     },
   ])
 
-  private handleTap = event([{ nativeEvent: { state: this.tapState } }])
+  private handleTap = ev => {
+    console.log('onhandlerstatechange, ev : ', ev.nativeEvent)
+
+    if (this.props.onSnapChange) {
+      this.props.onSnapChange(ev.nativeEvent)
+    }
+
+    return event([{ nativeEvent: { state: this.tapState } }])
+  }
 
   private withEnhancedLimits(
     val: Animated.Node<number>,
@@ -884,15 +892,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
                     this.props.enabledContentGestureInteraction &&
                     this.props.enabledContentTapInteraction
                   }
-                  onHandlerStateChange={ev => {
-                    console.log('onhandlerstatechange, ev : ', ev.nativeEvent)
-                    if (this && this.handleTap) {
-                      if (this.props.onSnapChange) {
-                        this.props.onSnapChange(ev.nativeEvent)
-                      }
-                      return this.handleTap(ev)
-                    }
-                  }}
+                  onHandlerStateChange={this.handleTap}
                   simultaneousHandlers={this.props.simultaneousHandlers}
                 >
                   <Animated.View
