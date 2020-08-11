@@ -719,8 +719,17 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
     nativeEvent: {
       layout: { height },
     },
-  }: LayoutChangeEvent) =>
+  }: LayoutChangeEvent) => {
     this.state.heightOfContent.setValue(height - this.state.initSnap)
+
+    if (this.props.onSnapChange) {
+      try {
+        this.props.onSnapChange(this.state)
+      } catch (e) {
+        console.error('props.onSnapChange error: ', e)
+      }
+    }
+  }
 
   static renumber = (str: string) =>
     (Number(str.split('%')[0]) * screenHeight) / 100
@@ -779,7 +788,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
         ].val
     }
 
-    const result = {
+    return {
       init,
       propsToNewIndices,
       heightOfHeaderAnimated:
@@ -789,16 +798,6 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
       snapPoints,
       heightOfHeader: (state && state.heightOfHeader) || 0,
     }
-
-    if (props.onSnapChange) {
-      try {
-        props.onSnapChange(result)
-      } catch (e) {
-        console.error('props.onSnapChange error: ', e)
-      }
-    }
-
-    return result
   }
 
   render() {
