@@ -573,7 +573,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
     },
   ])
 
-  private handleTap = ev => {
+  private handleTap = (ev: any) => {
     console.log('onhandlerstatechange, ev : ', ev.nativeEvent)
 
     if (this.props.onSnapChange) {
