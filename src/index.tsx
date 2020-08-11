@@ -715,7 +715,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
     },
   }: LayoutChangeEvent) =>
     requestAnimationFrame(() => {
-      console.log('handleFullHeader: ', heightOfHeader)
+      console.log('handleFullHeader: ', height)
       this.height.setValue(height)
     })
 
