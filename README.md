@@ -65,7 +65,7 @@ class Example extends React.Component {
 | enabledGestureInteraction | no       | `true`  | Defines if bottom sheet could be scrollable by gesture. |
 | enabledHeaderGestureInteraction | no       | `true`  | Defines if bottom sheet header could be scrollable by gesture. |
 | enabledContentGestureInteraction | no       | `true`  | Defines if bottom sheet content could be scrollable by gesture. |
-| enabledContentTapInteraction | no       | `true`  | Defines whether bottom sheet content could be tapped. |
+| enabledContentTapInteraction | no       | `true`  | Defines whether bottom sheet content could be tapped. **Note:** If you use `Touchable*` components inside your `renderContent`, you'll have to switch this to `false` to make handlers like `onPress` work. (See [this comment](https://github.com/osdnk/react-native-reanimated-bottom-sheet/issues/219#issuecomment-625894292).) |
 | enabledManualSnapping     | no       | `true`  | If `false` blocks snapping using `snapTo` method. |
 | enabledBottomClamp        | no       | `false` | If `true` block movement is clamped from bottom to minimal snapPoint. |
 | enabledBottomInitialAnimation        | no       | `false` | If `true` sheet will grows up from bottom to initial snapPoint. |
