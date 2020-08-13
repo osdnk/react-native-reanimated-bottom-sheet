@@ -104,6 +104,7 @@ More complex examples can be found in the `Example` folder. To view the examples
 
 ```sh
 yarn
+yarn prepare
 cd Example
 yarn
 expo start
