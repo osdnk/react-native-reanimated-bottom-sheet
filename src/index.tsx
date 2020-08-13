@@ -293,7 +293,7 @@ function withDecaying(
   ])
 }
 
-const GestureHandlerWrapper = GestureHandlerRootView || View;
+const GestureHandlerWrapper = GestureHandlerRootView || View
 
 export default class BottomSheetBehavior extends React.Component<Props, State> {
   static defaultProps = {
