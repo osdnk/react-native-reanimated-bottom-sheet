@@ -116,6 +116,7 @@ type Props = {
   onCloseEnd?: () => void
   callbackThreshold?: number
   borderRadius?: number
+  overflow?: 'visible' | 'hidden'
 }
 
 type State = {
@@ -845,7 +846,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
             style={
               this.props.enabledInnerScrolling && {
                 height: this.state.initSnap - this.state.heightOfHeader,
-                overflow: 'hidden',
+                overflow: this.props.overflow || 'hidden',
                 borderTopLeftRadius: borderRadius,
                 borderTopRightRadius: borderRadius,
               }
