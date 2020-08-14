@@ -4,7 +4,6 @@ import Animated from 'react-native-reanimated'
 import {
   PanGestureHandler,
   TapGestureHandler,
-  GestureHandlerRootView,
   State as GestureState,
 } from 'react-native-gesture-handler'
 
@@ -292,8 +291,6 @@ function withDecaying(
     valDecayed,
   ])
 }
-
-const GestureHandlerWrapper = GestureHandlerRootView || View
 
 export default class BottomSheetBehavior extends React.Component<Props, State> {
   static defaultProps = {
@@ -797,7 +794,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
   render() {
     const { borderRadius } = this.props
     return (
-      <GestureHandlerWrapper>
+      <>
         <Animated.View
           style={{
             height: '100%',
@@ -1061,7 +1058,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
             )}
           </View>
         </Animated.View>
-      </GestureHandlerWrapper>
+      </>
     )
   }
 }
