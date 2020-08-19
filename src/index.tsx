@@ -30,6 +30,11 @@ type Props = {
   renderHeader?: () => React.ReactNode
 
   /**
+   * Method for rendering background elements of bottom sheet.
+   */
+  renderBackground?: () => React.ReactNode
+
+  /**
    * Defines if bottom sheet could be scrollable by gesture. Defaults to true.
    */
   enabledGestureInteraction?: boolean
@@ -849,6 +854,13 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
               }
             }
           >
+            {this.props.renderBackground && (
+              <View style={{position: 'absolute', flex: 1, top: 0, zIndex: -1}}>
+                {() => {
+                  return this.renderBackground();
+                }}
+              </View>
+            )}
             <PanGestureHandler
               enabled={
                 this.props.enabledGestureInteraction &&
@@ -1060,5 +1072,16 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
         </Animated.View>
       </>
     )
+  }
+
+  renderBackground() {
+    if (this.props.renderBackground) {
+      console.log('BottomSheet renderBackground()');
+      return this.props.renderBackground();
+    } else {
+      console.log('BottomSheet NO renderBackground');
+    }
+
+    return null;
   }
 }
