@@ -1,6 +1,6 @@
 {
-  "name": "reanimated-bottom-sheet",
-  "version": "1.0.0-alpha.22",
+  "name": "@skyraptor/reanimated-bottom-sheet",
+  "version": "1.0.0-alpha.25",
   "description": "Bottom sheet component",
   "main": "lib/commonjs/index.js",
   "module": "lib/module/index.js",
