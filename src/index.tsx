@@ -808,6 +808,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
             width: '100%',
             position: 'absolute',
             zIndex: 100,
+            elevation: 100,
             opacity: cond(this.height, 1, 0),
             transform: [
               {
