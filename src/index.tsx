@@ -834,6 +834,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
             <Animated.View
               style={{
                 zIndex: 101,
+                elevation: 101
               }}
               onLayout={this.handleLayoutHeader}
             >
