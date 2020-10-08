@@ -681,7 +681,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
   }
 
   snapTo = (index: number) => {
-    if (!this.props.enabledImperativeSnapping) {
+    if (!this.props.enabledImperativeSnapping || index >= this.state.snapPoints.length || index < 0) {
       return
     }
 
