@@ -50,7 +50,6 @@ We're done! Now you can build and run the app on your device/simulator.
 ```javascript
 import * as React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
-import Animated from 'react-native-reanimated';
 import BottomSheet from 'reanimated-bottom-sheet';
 
 export default function App() {
