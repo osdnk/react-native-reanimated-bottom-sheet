@@ -1,11 +1,23 @@
 import * as React from 'react'
-import { Dimensions, Platform, View, LayoutChangeEvent } from 'react-native'
+import {
+  Dimensions,
+  Platform,
+  View,
+  LayoutChangeEvent,
+  StyleProp,
+  ViewStyle,
+} from 'react-native'
 import Animated from 'react-native-reanimated'
 import {
   PanGestureHandler,
   TapGestureHandler,
   State as GestureState,
 } from 'react-native-gesture-handler'
+
+import { ComponentProps } from './utility-types'
+import Styles from './styles'
+
+type AnimatedViewProps = ComponentProps<Animated.View>
 
 type Props = {
   /**
@@ -116,6 +128,10 @@ type Props = {
   callbackThreshold?: number
   borderRadius?: number
   overflow?: 'visible' | 'hidden'
+  styles?: {
+    borderContainer?: StyleProp<ViewStyle>
+    animatedContainer?: AnimatedViewProps['style']
+  }
 }
 
 type State = {
@@ -311,6 +327,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
       React.createRef(),
     ],
     callbackThreshold: 0.01,
+    styles: {},
   }
 
   private decayClock = new Clock()
@@ -796,28 +813,25 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
     return (
       <>
         <Animated.View
-          style={{
-            height: '100%',
-            width: 0,
-            position: 'absolute',
-          }}
+          style={Styles.handleFullHeader}
           onLayout={this.handleFullHeader}
         />
         <Animated.View
-          style={{
-            width: '100%',
-            position: 'absolute',
-            zIndex: 100,
-            opacity: cond(this.height, 1, 0),
-            transform: [
-              {
-                translateY: this.translateMaster,
-              },
-              {
-                translateY: sub(this.height, this.state.initSnap) as any,
-              },
-            ],
-          }}
+          style={[
+            Styles.animatedContainer,
+            {
+              opacity: cond(this.height, 1, 0),
+              transform: [
+                {
+                  translateY: this.translateMaster,
+                },
+                {
+                  translateY: sub(this.height, this.state.initSnap),
+                },
+              ],
+            },
+            this.props.styles && this.props.styles.animatedContainer,
+          ]}
         >
           <PanGestureHandler
             enabled={
@@ -831,23 +845,22 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
             simultaneousHandlers={this.props.simultaneousHandlers}
           >
             <Animated.View
-              style={{
-                zIndex: 101,
-              }}
+              style={Styles.handleLayoutHeader}
               onLayout={this.handleLayoutHeader}
             >
               {this.props.renderHeader && this.props.renderHeader()}
             </Animated.View>
           </PanGestureHandler>
           <View
-            style={
+            style={[
               this.props.enabledInnerScrolling && {
                 height: this.state.initSnap - this.state.heightOfHeader,
                 overflow: this.props.overflow || 'hidden',
                 borderTopLeftRadius: borderRadius,
                 borderTopRightRadius: borderRadius,
-              }
-            }
+              },
+              this.props.styles && this.props.styles.borderContainer,
+            ]}
           >
             <PanGestureHandler
               enabled={
@@ -872,10 +885,12 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
                   simultaneousHandlers={this.props.simultaneousHandlers}
                 >
                   <Animated.View
-                    style={{
-                      width: '100%',
-                      transform: [{ translateY: this.Y as any }],
-                    }}
+                    style={[
+                      Styles.container,
+                      {
+                        transform: [{ translateY: this.Y }],
+                      },
+                    ]}
                     onLayout={this.handleLayoutContent}
                   >
                     {this.props.renderContent && this.props.renderContent()}
