@@ -128,8 +128,6 @@ type State = {
   heightOfHeaderAnimated: Animated.Value<number>
 }
 
-const { height: screenHeight } = Dimensions.get('window')
-
 const P = <T extends any>(android: T, ios: T): T =>
   Platform.OS === 'ios' ? ios : android
 
@@ -717,8 +715,10 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
   }: LayoutChangeEvent) =>
     this.state.heightOfContent.setValue(height - this.state.initSnap)
 
-  static renumber = (str: string) =>
-    (Number(str.split('%')[0]) * screenHeight) / 100
+  static renumber = (str: string) => {
+    const { height: screenHeight } = Dimensions.get('window')
+    return (Number(str.split('%')[0]) * screenHeight) / 100
+  }
 
   static getDerivedStateFromProps(
     props: Props,
