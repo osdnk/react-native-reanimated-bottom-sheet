@@ -7,7 +7,7 @@ import {
   State as GestureState,
 } from 'react-native-gesture-handler'
 
-type Props = {
+export type BottomSheetProps = {
   /**
    * Points for snapping of bottom sheet component. They define distance from bottom of the screen.
    * Might be number or percent (as string e.g. '20%') for points or percents of screen height from bottom.
@@ -292,7 +292,7 @@ function withDecaying(
   ])
 }
 
-export default class BottomSheetBehavior extends React.Component<Props, State> {
+export default class BottomSheetBehavior extends React.Component<BottomSheetProps, State> {
   static defaultProps = {
     overdragResistanceFactor: 0,
     initialSnap: 0,
@@ -337,7 +337,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
   private onCloseStartValue: Animated.Value<number> = new Value(1)
   private onCloseEndValue: Animated.Value<number> = new Value(0)
 
-  constructor(props: Props) {
+  constructor(props: BottomSheetProps) {
     super(props)
 
     this.panRef = props.innerGestureHandlerRefs[0]
@@ -493,7 +493,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
     )
   }
 
-  componentDidUpdate(_prevProps: Props, prevState: State) {
+  componentDidUpdate(_prevProps: BottomSheetProps, prevState: State) {
     const { snapPoints } = this.state
     if (this.props.enabledBottomClamp && snapPoints !== prevState.snapPoints) {
       this.clampingValue.setValue(snapPoints[snapPoints.length - 1])
@@ -721,7 +721,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
     (Number(str.split('%')[0]) * screenHeight) / 100
 
   static getDerivedStateFromProps(
-    props: Props,
+    props: BottomSheetProps,
     state: State | undefined
   ): State {
     let snapPoints
