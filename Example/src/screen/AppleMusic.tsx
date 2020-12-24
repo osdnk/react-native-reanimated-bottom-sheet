@@ -69,11 +69,11 @@ const AppleMusic = () => {
   })
 
   const onFlatListTouchStart = () => {
-    bottomSheetRef.current!.snapTo(0)
+    bottomSheetRef.current!.snapToIndex(0)
   }
 
   const onHeaderPress = () => {
-    bottomSheetRef.current!.snapTo(1)
+    bottomSheetRef.current!.snapToIndex(1)
   }
 
   const renderContent = () => {
@@ -116,9 +116,9 @@ const AppleMusic = () => {
           </View>
 
           <Text style={styles.songTitleLarge}>{song.name}</Text>
-          <Text style={styles.songInfoText}>{`${song.artist} ⏤ ${
-            song.album
-          }`}</Text>
+          <Text
+            style={styles.songInfoText}
+          >{`${song.artist} ⏤ ${song.album}`}</Text>
         </AnimatedView>
       </AnimatedView>
     )

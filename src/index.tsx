@@ -52,7 +52,7 @@ type Props = {
   enabledBottomInitialAnimation?: boolean
 
   /**
-   * If false blocks snapping using snapTo method. Defaults to true.
+   * If false blocks snapping using snapToIndex method. Defaults to true.
    */
   enabledManualSnapping?: boolean
 
@@ -680,7 +680,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
     ])
   }
 
-  snapTo = (index: number) => {
+  snapToIndex = (index: number) => {
     if (!this.props.enabledImperativeSnapping) {
       return
     }
@@ -729,23 +729,18 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
       val: number
       ind: number
     }> = props.snapPoints
-      .map(
-        (
-          s: number | string,
-          i: number
-        ): {
-          val: number
-          ind: number
-        } => {
-          if (typeof s === 'number') {
-            return { val: s, ind: i }
-          } else if (typeof s === 'string') {
-            return { val: BottomSheetBehavior.renumber(s), ind: i }
-          }
-
-          throw new Error(`Invalid type for value ${s}: ${typeof s}`)
+      .map((s: number | string, i: number): {
+        val: number
+        ind: number
+      } => {
+        if (typeof s === 'number') {
+          return { val: s, ind: i }
+        } else if (typeof s === 'string') {
+          return { val: BottomSheetBehavior.renumber(s), ind: i }
         }
-      )
+
+        throw new Error(`Invalid type for value ${s}: ${typeof s}`)
+      })
       .sort(({ val: a }, { val: b }) => b - a)
     if (state && state.snapPoints) {
       state.snapPoints.forEach(
@@ -759,7 +754,7 @@ export default class BottomSheetBehavior extends React.Component<Props, State> {
       snapPoints = state.snapPoints
     } else {
       snapPoints = sortedPropsSnapPoints.map(
-        p => new Value(sortedPropsSnapPoints[0].val - p.val)
+        (p) => new Value(sortedPropsSnapPoints[0].val - p.val)
       )
     }
 

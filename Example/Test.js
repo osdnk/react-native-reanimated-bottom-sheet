@@ -38,16 +38,16 @@ export default class Example extends React.Component {
           renderContent={this.renderInner}
           renderHeader={this.renderHeader}
         />
-        <Button onPress={() => this.bs.current.snapTo(0)} title="0" />
-        <Button onPress={() => this.bs.current.snapTo(1)} title="1" />
+        <Button onPress={() => this.bs.current.snapToIndex(0)} title="0" />
+        <Button onPress={() => this.bs.current.snapToIndex(1)} title="1" />
         <Button
-          onPress={() => this.bs.current.snapTo(2)}
+          onPress={() => this.bs.current.snapToIndex(2)}
           style={{
             zIndex: 0,
           }}
           title="2"
         />
-        <Button onPress={() => this.bs.current.snapTo(3)} title="3" />
+        <Button onPress={() => this.bs.current.snapToIndex(3)} title="3" />
       </View>
     )
   }

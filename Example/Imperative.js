@@ -47,25 +47,25 @@ export default class Example extends React.Component {
         >
           <TouchableOpacity
             style={styles.commandButton}
-            onPress={() => this.bs.current.snapTo(0)}
+            onPress={() => this.bs.current.snapToIndex(0)}
           >
             <Text style={styles.panelButtonTitle}>1</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.commandButton}
-            onPress={() => this.bs.current.snapTo(1)}
+            onPress={() => this.bs.current.snapToIndex(1)}
           >
             <Text style={styles.panelButtonTitle}>2</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.commandButton}
-            onPress={() => this.bs.current.snapTo(2)}
+            onPress={() => this.bs.current.snapToIndex(2)}
           >
             <Text style={styles.panelButtonTitle}>3</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.commandButton}
-            onPress={() => this.bs.current.snapTo(3)}
+            onPress={() => this.bs.current.snapToIndex(3)}
           >
             <Text style={styles.panelButtonTitle}>4</Text>
           </TouchableOpacity>

@@ -15,7 +15,7 @@ export default class Example extends React.Component {
       <TextInput
         style={styles.search}
         onFocus={() => {
-          this.bs.current.snapTo(1)
+          this.bs.current.snapToIndex(1)
         }}
         placeholder="search"
       />
@@ -56,7 +56,9 @@ export default class Example extends React.Component {
           renderHeader={this.renderHeader}
           initialSnap={1}
         />
-        <TouchableWithoutFeedback onPress={() => this.bs.current.snapTo(0)}>
+        <TouchableWithoutFeedback
+          onPress={() => this.bs.current.snapToIndex(0)}
+        >
           <Image style={styles.map} source={require('./assets/map-bg.jpg')} />
         </TouchableWithoutFeedback>
       </View>
