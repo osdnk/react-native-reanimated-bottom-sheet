@@ -62,7 +62,7 @@ type Props = {
   enabledInnerScrolling?: boolean
 
   /**
-   * Reanimated node which holds position of bottom sheet, where 1 it the highest snap point and 0 is the lowest.
+   * Reanimated node which holds position of bottom sheet, where 0 it the highest snap point and 1 is the lowest.
    */
   callbackNode?: Animated.Value<number>
 
