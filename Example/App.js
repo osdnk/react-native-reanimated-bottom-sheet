@@ -5,9 +5,10 @@ import {
   FlatList,
   StyleSheet,
   TouchableOpacity,
+  SafeAreaView,
 } from 'react-native'
-import { createAppContainer } from 'react-navigation'
-import { createStackNavigator } from 'react-navigation-stack'
+import { createStackNavigator } from '@react-navigation/stack'
+import { NavigationContainer } from '@react-navigation/native'
 
 import AppleMusic from './src/screen/AppleMusic'
 import Map from './Map'
@@ -55,17 +56,19 @@ class MainScreen extends React.Component {
   render() {
     const data = Object.keys(SCREENS).map(key => ({ key }))
     return (
-      <FlatList
-        style={styles.list}
-        data={data}
-        ItemSeparatorComponent={ItemSeparator}
-        renderItem={props => (
-          <MainScreenItem
-            {...props}
-            onPressItem={({ key }) => this.props.navigation.navigate(key)}
-          />
-        )}
-      />
+      <SafeAreaView>
+        <FlatList
+          style={styles.list}
+          data={data}
+          ItemSeparatorComponent={ItemSeparator}
+          renderItem={props => (
+            <MainScreenItem
+              {...props}
+              onPressItem={({ key }) => this.props.navigation.navigate(key)}
+            />
+          )}
+        />
+      </SafeAreaView>
     )
   }
 }
@@ -84,17 +87,35 @@ class MainScreenItem extends React.Component {
   }
 }
 
-const ExampleApp = createAppContainer(
-  createStackNavigator(
-    {
-      Main: { screen: MainScreen },
-      ...SCREENS,
-    },
-    {
-      initialRouteName: 'Main',
-    }
+const ExampleAppStack = createStackNavigator()
+
+const ExampleStackScreen = () => {
+  return (
+    <ExampleAppStack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+      initialRouteName={'Main'}
+    >
+      <ExampleAppStack.Screen name={'Main'} component={MainScreen} />
+      {Object.keys(SCREENS).map((screenName, idx) => (
+        <ExampleAppStack.Screen
+          key={idx}
+          name={screenName}
+          component={SCREENS[screenName].screen}
+        />
+      ))}
+    </ExampleAppStack.Navigator>
   )
+}
+
+const App = () => (
+  <NavigationContainer>
+    <ExampleStackScreen />
+  </NavigationContainer>
 )
+
+export default App
 
 const styles = StyleSheet.create({
   list: {
@@ -116,5 +137,3 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
 })
-
-export default ExampleApp

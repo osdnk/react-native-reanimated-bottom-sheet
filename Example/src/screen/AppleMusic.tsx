@@ -50,19 +50,19 @@ const AppleMusic = () => {
   let bottomSheetRef = React.createRef<BottomSheet>()
   let fall = new Animated.Value(1)
 
-  const animatedSongCoverTopPosition = Animated.interpolate(fall, {
+  const animatedSongCoverTopPosition = fall.interpolate({
     inputRange: [0, 1],
     outputRange: songCoverTopPositions.slice().reverse(),
     extrapolate: Animated.Extrapolate.CLAMP,
   })
 
-  const animatedSongCoverSize = Animated.interpolate(fall, {
+  const animatedSongCoverSize = fall.interpolate({
     inputRange: [0, 1],
     outputRange: [songCoverSizes[0], songCoverSizes[1]].slice().reverse(),
     extrapolate: Animated.Extrapolate.CLAMP,
   })
 
-  const animatedHeaderContentOpacity = Animated.interpolate(fall, {
+  const animatedHeaderContentOpacity = fall.interpolate({
     inputRange: [0.75, 1],
     outputRange: [0, 1],
     extrapolate: Animated.Extrapolate.CLAMP,
@@ -81,7 +81,7 @@ const AppleMusic = () => {
       1,
       animatedHeaderContentOpacity
     )
-    const animatedContentOpacity = Animated.interpolate(fall, {
+    const animatedContentOpacity = fall.interpolate({
       inputRange: [0, 1],
       outputRange: [1, 0],
       extrapolate: Animated.Extrapolate.CLAMP,
@@ -125,7 +125,7 @@ const AppleMusic = () => {
   }
 
   const renderSongCover = () => {
-    const animatedSongCoverLeftPosition = Animated.interpolate(fall, {
+    const animatedSongCoverLeftPosition = fall.interpolate({
       inputRange: [0, 1],
       outputRange: songCoverLeftPositions.slice().reverse(),
       extrapolate: Animated.Extrapolate.CLAMP,
@@ -190,7 +190,7 @@ const AppleMusic = () => {
               <Ionicons name="ios-play" size={32} />
             </TouchableOpacity>
             <TouchableOpacity style={styles.headerActionButton}>
-              <Ionicons name="ios-fastforward" size={32} />
+              <Ionicons name="ios-play-forward" size={32} />
             </TouchableOpacity>
           </AnimatedBlurView>
         </AnimatedView>
@@ -200,7 +200,7 @@ const AppleMusic = () => {
   }
 
   const renderShadow = () => {
-    const animatedShadowOpacity = Animated.interpolate(fall, {
+    const animatedShadowOpacity = fall.interpolate({
       inputRange: [0, 1],
       outputRange: [0.5, 0],
     })
@@ -220,7 +220,7 @@ const AppleMusic = () => {
 
   const renderHandler = () => {
     const animatedBar1Rotation = (outputRange: number[]) =>
-      Animated.interpolate(fall, {
+      fall.interpolate({
         inputRange: [0, 1],
         outputRange: outputRange,
         extrapolate: Animated.Extrapolate.CLAMP,
