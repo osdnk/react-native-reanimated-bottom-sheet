@@ -98,7 +98,7 @@ export default function App() {
 
 | name                      | required | default | description |
 | ------------------------- | -------- | ------- | ------------|
-| snapPoints                | yes      |         | E.g. `[300, 200, 0]`. Points for snapping of bottom sheet coomponent. They define distance from bottom of the screen. Might be number or percent (as string e.g. `'20%'`) for points or percents of screen height from bottom. Note: Array values must be in descending order. |
+| snapPoints                | yes      |         | E.g. `[300, 200, 0]`. Points for snapping of bottom sheet component. They define distance from bottom of the screen. Might be number or percent (as string e.g. `'20%'`) for points or percents of screen height from bottom. Note: Array values must be in descending order. |
 | initialSnap               | no       |    0    | Determines initial snap point of bottom sheet. The value is the index from snapPoints. |
 | renderContent             | no       |         | Method for rendering scrollable content of bottom sheet. |
 | renderHeader              | no       |         | Method for rendering non-scrollable header of bottom sheet. |
